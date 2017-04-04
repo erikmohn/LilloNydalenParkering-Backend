@@ -17,7 +17,7 @@ var users = require('./routes/users');
 
 console.log("Connection to MongoDB: " + config.mongodb.url);
 
-//mongoose.connect(config.mongodb.url);
+mongoose.connect(config.mongodb.url);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
