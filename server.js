@@ -1,5 +1,5 @@
 var express = require('express');
-var Pusher = require('pusher');
+//var Pusher = require('pusher');
 var app = express();
 app.set('port', (process.env.PORT || 5000));
 
@@ -39,7 +39,7 @@ router.get('/parking/requests', parking.getValidRequests);
 
 router.get('/parking/user/:userId', parking.getValidRequestForUser);
 //router.get('/parking/my/offers/:userId', parking.getMyValidRequests);
-
+/*
 app.get('/', function(request, response) {
 	console.log("Will push Hello World message!");
   var pusher = new Pusher({
@@ -49,7 +49,7 @@ app.get('/', function(request, response) {
 	  cluster = "eu"
 	});
   pusher.trigger('my-channel', 'my-event', {"message": "hello world"});
-});
+});*/
 
 app.use('', router);
 
