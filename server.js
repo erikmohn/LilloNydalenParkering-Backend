@@ -15,7 +15,7 @@ var ParkingRequest = require('./models/parkingrequest');
 var parking = require('./routes/parking');
 var users = require('./routes/users');
 
-console.log("Connection to MongoDB: " + config.mongodb.url);
+console.log("Connecting to MongoDB: " + config.mongodb.url);
 
 mongoose.connect(config.mongodb.url);
 
