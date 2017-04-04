@@ -1,6 +1,6 @@
 var express = require('express');
 var app = express();
-var port = process.env.PORT || 8000;
+app.set('port', (process.env.PORT || 5000));
 
 var config = require('./config');
 var bodyParser = require('body-parser');
@@ -17,7 +17,7 @@ var users = require('./routes/users');
 
 console.log("Connection to MongoDB: " + config.mongodb.url);
 
-mongoose.connect(config.mongodb.url);
+//mongoose.connect(config.mongodb.url);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -39,10 +39,12 @@ router.get('/parking/requests', parking.getValidRequests);
 router.get('/parking/user/:userId', parking.getValidRequestForUser);
 //router.get('/parking/my/offers/:userId', parking.getMyValidRequests);
 
+app.get('/', function(request, response) {
+  
+});
 
 app.use('', router);
 
-app.listen(port, function() {
-	console.log('Listening on port %s...', port);
+app.listen(app.get('port'), function() {
+  console.log('Node app is running on port', app.get('port'));
 });
-
