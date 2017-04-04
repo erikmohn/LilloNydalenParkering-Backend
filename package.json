@@ -1,12 +1,13 @@
 {
   "name": "fernanda-nissen-parkering-backend",
   "description": "Backend services for Fernanda nissen parkering ",
+  "license": "MIT",
+  "author": "Erik Mohn",
   "version": "0.0.1",
   "private": true,
   "main": "server.js",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development PORT=3001 node server.js",
-    "start": "cross-env NODE_ENV=production PORT=8001 node server.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "body-parser": "~1.0.1",
@@ -15,5 +16,8 @@
     "moment": "2.13.0",
     "mongoose": "~4.4.14",
     "morgan": "1.7.0"
+  },
+  "engines": {
+    "node": "4.1.1"
   }
 }
