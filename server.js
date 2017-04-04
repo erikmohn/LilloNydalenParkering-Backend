@@ -41,14 +41,14 @@ router.get('/parking/user/:userId', parking.getValidRequestForUser);
 //router.get('/parking/my/offers/:userId', parking.getMyValidRequests);
 
 app.get('/', function(request, response) {
-	console.log("Will push Hello World message!");
+/*	console.log("Will push Hello World message!");
   var pusher = new Pusher({
 	  appId: '323709',
 	  key: 'b3268785e53213585357',
 	  secret: '0e34a2e3fdc069b66f01',
 	  cluster = "eu"
 	});
-  pusher.trigger('my-channel', 'my-event', {"message": "hello world"});
+  pusher.trigger('my-channel', 'my-event', {"message": "hello world"});*/
 });
 
 app.use('', router);
