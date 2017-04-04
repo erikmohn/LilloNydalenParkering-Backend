@@ -42,5 +42,5 @@ router.get('/parking/user/:userId', parking.getValidRequestForUser);
 
 app.use('', router);
 
-app.listen(port);
 console.log('Listening on port %s...', port);
+app.listen(port);
