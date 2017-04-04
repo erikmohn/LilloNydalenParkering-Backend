@@ -41,6 +41,7 @@ router.get('/parking/user/:userId', parking.getValidRequestForUser);
 //router.get('/parking/my/offers/:userId', parking.getMyValidRequests);
 
 app.get('/', function(request, response) {
+	console.log("Will push Hello World message!");
   var pusher = new Pusher({
 	  appId: '323709',
 	  key: 'b3268785e53213585357',
