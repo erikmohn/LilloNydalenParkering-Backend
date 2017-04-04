@@ -1,4 +1,5 @@
 var express = require('express');
+var Pusher = require('pusher');
 var app = express();
 app.set('port', (process.env.PORT || 5000));
 
@@ -40,7 +41,13 @@ router.get('/parking/user/:userId', parking.getValidRequestForUser);
 //router.get('/parking/my/offers/:userId', parking.getMyValidRequests);
 
 app.get('/', function(request, response) {
-  
+  var pusher = new Pusher({
+	  appId: '323709',
+	  key: 'b3268785e53213585357',
+	  secret: '0e34a2e3fdc069b66f01',
+	  cluster = "eu"
+	});
+  pusher.trigger('my-channel', 'my-event', {"message": "hello world"});
 });
 
 app.use('', router);

@@ -15,7 +15,8 @@
     "express": "~4.13.4",
     "moment": "2.13.0",
     "mongoose": "~4.4.14",
-    "morgan": "1.7.0"
+    "morgan": "1.7.0",
+    "pusher": "4.0.0"
   },
   "engines": {
     "node": "4.1.1"
