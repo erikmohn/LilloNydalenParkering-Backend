@@ -16,6 +16,7 @@ exports.push = function(req, res) {
 	  "message": "hello world"
 	});
 
+	res.json("Result of push");
 }
 
 exports.requestParking =  function(req, res) {
