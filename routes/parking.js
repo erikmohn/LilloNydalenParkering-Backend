@@ -1,10 +1,12 @@
 var ParkingUser = require('../models/user');
 var ParkingRequest = require('../models/parkingrequest');
 var Pusher = require('pusher');
+var Pushwoosh = require('pushwoosh-client');
 
 exports.push = function(req, res) {
-	console.log("Will try to push trough Pusher!");
+	console.log("Will try to push trough PushWoosh!");
 
+	/*
 	var pusher = new Pusher({
 	  appId: '323709',
 	  key: 'b3268785e53213585357',
@@ -15,6 +17,16 @@ exports.push = function(req, res) {
 
 	pusher.trigger('my-channel', 'my-event', {
 	  "message": "hello world"
+	});*/
+
+	var client= new Pushwoosh("2D52E-A279A", "10kqID2h62E4Gn4Ax38TifJKxUmZtbtgbUlrQQRDWhVhNH27JqMymGtRXNv1xCbWAOKzlEJa7XZPiS6yB0Bc");
+
+	client.sendMessage('Hello world', function(error, response) {
+	     if (error) {
+	        console.log('Some error occurs: ', error);
+	     }
+
+	     console.log('Pushwoosh API response is', response);
 	});
 
 	res.json("Result of push");

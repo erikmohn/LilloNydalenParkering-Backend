@@ -16,7 +16,8 @@
     "moment": "2.13.0",
     "mongoose": "~4.4.14",
     "morgan": "1.7.0",
-    "pusher": "1.5.1"
+    "pusher": "1.5.1",
+    "pushwoosh-client": "1.4.0"
   },
   "engines": {
     "node": "4.1.1"
