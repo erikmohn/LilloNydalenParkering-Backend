@@ -3,6 +3,7 @@ var ParkingRequest = require('../models/parkingrequest');
 var Pusher = require('pusher');
 
 exports.push = function(req, res) {
+	console.log("Will try to push trough Pusher!");
 
 	var pusher = new Pusher({
 	  appId: '323709',
@@ -17,7 +18,7 @@ exports.push = function(req, res) {
 	});
 
 	res.json("Result of push");
-}
+};
 
 exports.requestParking =  function(req, res) {
 	ParkingUser.findOne({ '_id': req.body.userId }, function(err, user) {
