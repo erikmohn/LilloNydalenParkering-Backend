@@ -1,6 +1,22 @@
 var ParkingUser = require('../models/user');
 var ParkingRequest = require('../models/parkingrequest');
+var Pusher = require('pusher');
 
+exports.push = function(req, res) {
+
+	var pusher = new Pusher({
+	  appId: '323709',
+	  key: 'b3268785e53213585357',
+	  secret: '0e34a2e3fdc069b66f01',
+	  cluster: 'eu',
+	  encrypted: true
+	});
+
+	pusher.trigger('my-channel', 'my-event', {
+	  "message": "hello world"
+	});
+
+}
 
 exports.requestParking =  function(req, res) {
 	ParkingUser.findOne({ '_id': req.body.userId }, function(err, user) {
