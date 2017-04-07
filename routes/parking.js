@@ -42,7 +42,7 @@ exports.requestParking =  function(req, res) {
 					var client= new Pushwoosh("2D52E-A279A", "10kqID2h62E4Gn4Ax38TifJKxUmZtbtgbUlrQQRDWhVhNH27JqMymGtRXNv1xCbWAOKzlEJa7XZPiS6yB0Bc");
 
 					var message = user.userName + " spør etter parkering: \n" +
-					"Fra: " + parking.startTime +
+					"Fra: " + parking.startTime + "\n" +
 					"Til: " + parking.endTime;
 
 					client.sendMessage(message, function(error, response) {
