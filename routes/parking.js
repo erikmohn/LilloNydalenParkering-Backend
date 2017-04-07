@@ -75,7 +75,7 @@ exports.offerParking =  function(req, res) {
 								  cluster: 'eu',
 								  encrypted: true
 								});
-				            	console.log("Will try to push to: " + parking.requestUser);
+				            	console.log("Will try to push to: " + updatedParking.requestUser);
 								pusher.trigger(parking.requestUser._id, 'parking-offer', {
 								  "message": "hello world"
 								});
