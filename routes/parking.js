@@ -49,6 +49,8 @@ exports.requestParking =  function(req, res) {
 					     if (error) {
 					        console.log('Some error occurs: ', error);
 					     }
+
+					     console.log("Push sendt!");
 					});
 
 	        		res.json({ 
