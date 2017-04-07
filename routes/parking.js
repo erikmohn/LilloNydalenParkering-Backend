@@ -57,7 +57,7 @@ exports.offerParking =  function(req, res) {
 	        } else {
 	        	ParkingRequest.findOne({'_id': req.body.parkingId})
 	        					.populate("requestUser")
-	        					.exec function(err, parking) {
+	        					.exec(function(err, parking) {
 	        		if (err) {
         				res.status(500).send(err);
         			} else {
