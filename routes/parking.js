@@ -6,19 +6,6 @@ var Pushwoosh = require('pushwoosh-client');
 exports.push = function(req, res) {
 	console.log("Will try to push trough PushWoosh!");
 
-	/*
-	var pusher = new Pusher({
-	  appId: '323709',
-	  key: 'b3268785e53213585357',
-	  secret: '0e34a2e3fdc069b66f01',
-	  cluster: 'eu',
-	  encrypted: true
-	});
-
-	pusher.trigger('my-channel', 'my-event', {
-	  "message": "hello world"
-	});*/
-
 };
 
 exports.requestParking =  function(req, res) {
@@ -80,6 +67,19 @@ exports.offerParking =  function(req, res) {
 				            if (err) {
 				                res.status(500).send(err)
 				            }
+
+				            	var pusher = new Pusher({
+								  appId: '323709',
+								  key: 'b3268785e53213585357',
+								  secret: '0e34a2e3fdc069b66f01',
+								  cluster: 'eu',
+								  encrypted: true
+								});
+
+								pusher.trigger(parking.requestUser._id, 'parking-offer', {
+								  "message": "hello world"
+								});
+
 				            res.send(updatedParking);
 				        });
         			}
