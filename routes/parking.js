@@ -56,7 +56,6 @@ exports.offerParking =  function(req, res) {
 	        	res.send(err);
 	        } else {
 	        	ParkingRequest.findOne({'_id': req.body.parkingId})
-	        					.populate("requestUser")
 	        					.exec(function(err, parking) {
 	        		if (err) {
         				res.status(500).send(err);
@@ -76,7 +75,7 @@ exports.offerParking =  function(req, res) {
 								  cluster: 'eu',
 								  encrypted: true
 								});
-				            	console.log("Will try to push to: " + parking.requestUser._id);
+				            	console.log("Will try to push to: " + parking.requestUser);
 								pusher.trigger(parking.requestUser._id, 'parking-offer', {
 								  "message": "hello world"
 								});
