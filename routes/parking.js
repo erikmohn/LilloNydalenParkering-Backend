@@ -55,8 +55,9 @@ exports.offerParking =  function(req, res) {
 	        if (err) {
 	        	res.send(err);
 	        } else {
-	        	ParkingRequest.findOne({'_id': req.body.parkingId}, function(err, parking) {
-
+	        	ParkingRequest.findOne({'_id': req.body.parkingId})
+	        					.populate("requestUser")
+	        					.exec function(err, parking) {
 	        		if (err) {
         				res.status(500).send(err);
         			} else {
