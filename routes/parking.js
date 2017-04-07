@@ -76,7 +76,7 @@ exports.offerParking =  function(req, res) {
 								  encrypted: true
 								});
 				            	console.log("Will try to push to: " + updatedParking.requestUser);
-								pusher.trigger(parking.requestUser._id, 'parking-offer', {
+								pusher.trigger(updatedParking.requestUser, 'parking-offer', {
 								  "message": "hello world"
 								});
 
