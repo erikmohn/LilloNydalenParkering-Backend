@@ -2,7 +2,7 @@ var ParkingUser = require('../models/user');
 var ParkingRequest = require('../models/parkingrequest');
 var Pusher = require('pusher');
 var Pushwoosh = require('pushwoosh-client');
-var Pushwoosh = require('moment');
+var Moment = require('moment');
 
 exports.push = function(req, res) {
 	console.log("Will try to push trough PushWoosh!");
@@ -30,8 +30,8 @@ exports.requestParking =  function(req, res) {
 					var client= new Pushwoosh("2D52E-A279A", "10kqID2h62E4Gn4Ax38TifJKxUmZtbtgbUlrQQRDWhVhNH27JqMymGtRXNv1xCbWAOKzlEJa7XZPiS6yB0Bc");
 
 					var message = user.userName + " spør etter parkering: \n" +
-					"Fra: " + moment(parking.startTime).locale("nb").format(" dddd hh:mm") + "\n" +
-					"Til: " + moment(parking.endTime).locale("nb").format(" dddd hh:mm");
+					"Fra: " + Moment(parking.startTime).locale("nb").format(" dddd hh:mm") + "\n" +
+					"Til: " + Moment(parking.endTime).locale("nb").format(" dddd hh:mm");
 
 					client.sendMessage(message, function(error, response) {
 					     if (error) {
