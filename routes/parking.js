@@ -19,17 +19,6 @@ exports.push = function(req, res) {
 	  "message": "hello world"
 	});*/
 
-	var client= new Pushwoosh("2D52E-A279A", "10kqID2h62E4Gn4Ax38TifJKxUmZtbtgbUlrQQRDWhVhNH27JqMymGtRXNv1xCbWAOKzlEJa7XZPiS6yB0Bc");
-
-	client.sendMessage('Hello world', function(error, response) {
-	     if (error) {
-	        console.log('Some error occurs: ', error);
-	     }
-
-	     console.log('Pushwoosh API response is', response);
-	});
-
-	res.json("Result of push");
 };
 
 exports.requestParking =  function(req, res) {
@@ -49,6 +38,19 @@ exports.requestParking =  function(req, res) {
         		if(err) {
             		res.send(err);
         		} else {
+
+					var client= new Pushwoosh("2D52E-A279A", "10kqID2h62E4Gn4Ax38TifJKxUmZtbtgbUlrQQRDWhVhNH27JqMymGtRXNv1xCbWAOKzlEJa7XZPiS6yB0Bc");
+
+					var message = user.userName + " spør etter parkering: \n" +
+					"Fra: " + parking.starTime +
+					"Til: " + parking.endTime;
+
+					client.sendMessage(message, function(error, response) {
+					     if (error) {
+					        console.log('Some error occurs: ', error);
+					     }
+					});
+
 	        		res.json({ 
 	                    message: 'Parking request saved!',
 	                    request: parking 
