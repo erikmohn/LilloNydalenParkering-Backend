@@ -4,6 +4,14 @@ var Pusher = require('pusher');
 var Pushwoosh = require('pushwoosh-client');
 var Moment = require('moment');
 
+var pusher = new Pusher({
+  appId: '323709',
+  key: 'b3268785e53213585357',
+  secret: '0e34a2e3fdc069b66f01',
+  cluster: 'eu',
+  encrypted: true
+});
+
 exports.push = function(req, res) {
 	console.log("Will try to push trough PushWoosh!");
 
@@ -41,6 +49,11 @@ exports.requestParking =  function(req, res) {
 					     console.log("Push sendt!");
 					});
 
+
+					pusher.trigger("global-request-channel", 'request-update', {
+					  
+					});
+
 	        		res.json({ 
 	                    message: 'Parking request saved!',
 	                    request: parking 
@@ -69,14 +82,6 @@ exports.offerParking =  function(req, res) {
 				                res.status(500).send(err)
 				            }
 
-				            	var pusher = new Pusher({
-								  appId: '323709',
-								  key: 'b3268785e53213585357',
-								  secret: '0e34a2e3fdc069b66f01',
-								  cluster: 'eu',
-								  encrypted: true
-								});
-				            	console.log("Will try to push to: " + updatedParking.requestUser);
 								pusher.trigger("USER-"+updatedParking.requestUser, 'parking-offer', {
 								  "message": "hello world"
 								});
