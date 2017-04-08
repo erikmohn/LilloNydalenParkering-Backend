@@ -30,8 +30,8 @@ exports.requestParking =  function(req, res) {
 					var client= new Pushwoosh("2D52E-A279A", "10kqID2h62E4Gn4Ax38TifJKxUmZtbtgbUlrQQRDWhVhNH27JqMymGtRXNv1xCbWAOKzlEJa7XZPiS6yB0Bc");
 
 					var message = user.userName + " spør etter parkering: \n" +
-					"Fra: " + Moment(parking.startTime).locale("nb").format(" dddd hh:mm") + "\n" +
-					"Til: " + Moment(parking.endTime).locale("nb").format(" dddd hh:mm");
+					"Fra: " + Moment(new Date(parking.startTime)).locale("nb").format(" dddd hh:mm") + "\n" +
+					"Til: " + Moment(new Date(parking.endTime)).locale("nb").format(" dddd hh:mm");
 
 					client.sendMessage(message, function(error, response) {
 					     if (error) {
