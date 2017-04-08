@@ -50,9 +50,7 @@ exports.requestParking =  function(req, res) {
 					});
 
 
-					pusher.trigger("global-request-channel", 'request-update', {
-					  
-					});
+					pusher.trigger("global-request-channel", 'request-update', {});
 
 	        		res.json({ 
 	                    message: 'Parking request saved!',
@@ -85,7 +83,7 @@ exports.offerParking =  function(req, res) {
 								pusher.trigger("USER-"+updatedParking.requestUser, 'parking-offer', {
 								  "message": "hello world"
 								});
-
+								pusher.trigger("global-request-channel", 'request-update', {});
 				            res.send(updatedParking);
 				        });
         			}
@@ -123,6 +121,7 @@ exports.cancleParking = function(req, res) {
 	            if (err) {
 	                res.status(500).send(err)
 	            }
+	            pusher.trigger("global-request-channel", 'request-update', {});
 	            res.send(updatedParking);
 	        });
 		}
