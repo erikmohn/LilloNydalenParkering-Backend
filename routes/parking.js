@@ -39,9 +39,13 @@ exports.requestParking =  function(req, res) {
 
 					var client= new Pushwoosh("2D52E-A279A", "10kqID2h62E4Gn4Ax38TifJKxUmZtbtgbUlrQQRDWhVhNH27JqMymGtRXNv1xCbWAOKzlEJa7XZPiS6yB0Bc");
 
+					String.prototype.capitalizeFirstLetter = function() {
+				    return this.charAt(0).toUpperCase() + this.slice(1);
+					}
+
 					var message = user.userName + " spør etter parkering: \n" +
-					"Fra: " + Moment(new Date(parking.startTime)).locale("nb").format(" dddd HH:mm") + " " +
-					"Til: " + Moment(new Date(parking.endTime)).locale("nb").format(" dddd HH:mm");
+					"Fra: " + Moment(new Date(parking.startTime)).locale("nb").format(" dddd HH:mm").capitalizeFirstLetter() + " " +
+					"Til: " + Moment(new Date(parking.endTime)).locale("nb").format(" dddd HH:mm").capitalizeFirstLetter();
 					/*
 					client.sendMessage(message, function(error, response) {
 					     if (error) {
