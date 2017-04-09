@@ -11,7 +11,9 @@ var ParkeringRequestSchema = new Schema({
     answered: Boolean,
     parkingLot: String,
     canceled: Boolean,
-    registred: Date
+    registredDate: Date,
+    answeredDate: Date,
+    done: Boolean
 });
 
 module.exports = mongoose.model('ParkingRequest', ParkeringRequestSchema);
