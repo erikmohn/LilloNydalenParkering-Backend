@@ -106,7 +106,8 @@ exports.getValidRequestForUser = function(req, res) {
         } else {
 			ParkingRequest.find({
 				'requestUser': user,
-				'canceled': false
+				'canceled': false,
+				'done': true
 			}).populate("offerParkingUser").exec(function(err, parking) {
 			        if (err) {
 			            res.send(err);

@@ -12,6 +12,7 @@ var ParkeringRequestSchema = new Schema({
     parkingLot: String,
     canceled: Boolean,
     registredDate: Date,
+    registred: Date,
     answeredDate: Date,
     done: Boolean
 });
