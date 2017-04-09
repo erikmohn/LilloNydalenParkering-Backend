@@ -36,7 +36,7 @@ router.post('/parking/done', parking.doneParking);
 router.post('/parking', parking.getParkingById);
 
 
-router.get('/parking/requests', parking.getValidRequests);
+router.post('/parking/requests', parking.getValidRequests);
 
 router.get('/parking/user/:userId', parking.getValidRequestForUser);
 router.get('/push', parking.push);

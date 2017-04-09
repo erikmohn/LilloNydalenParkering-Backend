@@ -160,7 +160,8 @@ exports.doneParking = function(req, res) {
 exports.getValidRequests =  function(req, res) {
         ParkingRequest.find({
         			'canceled':false,
-        			'answered':false
+        			'answered':false,
+        			'endTime' :{$gt :req.body.now}
         	}).populate("requestUser").exec(function(err, parkingRequests) {
             if (err)
                 res.send(err);
