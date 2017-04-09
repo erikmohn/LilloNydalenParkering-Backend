@@ -162,10 +162,13 @@ exports.getValidRequests =  function(req, res) {
         			'canceled':false,
         			'answered':false,
         			'endTime' :{$gt :req.body.now}
-        	}).populate("requestUser").exec(function(err, parkingRequests) {
-            if (err)
-                res.send(err);
-            res.json(parkingRequests);
+        	}).populate("requestUser")
+        	  .exec(function(err, parkingRequests) {
+	            if (err) {
+	                res.send(err);
+	            } else {
+	            	res.json(parkingRequests);	
+	            }
         });
 };
 
