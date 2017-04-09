@@ -40,7 +40,7 @@ exports.requestParking =  function(req, res) {
 					var message = user.userName + " spør etter parkering: \n" +
 					"Fra: " + Moment(new Date(parking.startTime)).locale("nb").format(" dddd HH:mm") + " " +
 					"Til: " + Moment(new Date(parking.endTime)).locale("nb").format(" dddd HH:mm");
-
+					/*
 					client.sendMessage(message, function(error, response) {
 					     if (error) {
 					        console.log('Some error occurs: ', error);
@@ -48,7 +48,7 @@ exports.requestParking =  function(req, res) {
 
 					     console.log("Push sendt!");
 					});
-
+					*/
 
 					pusher.trigger("global-request-channel", 'request-update', {});
 
