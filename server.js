@@ -32,6 +32,7 @@ router.get('/user/:userId', users.getUser);
 router.post('/parking/request', parking.requestParking);
 router.post('/parking/offer', parking.offerParking);
 router.post('/parking/cancle', parking.cancleParking);
+router.post('/parking/done', parking.doneParking);
 router.post('/parking', parking.getParkingById);
 
 

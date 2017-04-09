@@ -12,11 +12,6 @@ var pusher = new Pusher({
   encrypted: true
 });
 
-exports.push = function(req, res) {
-	console.log("Will try to push trough PushWoosh!");
-
-};
-
 exports.requestParking =  function(req, res) {
 	ParkingUser.findOne({ '_id': req.body.userId }, function(err, user) {
         if (err) {
@@ -29,7 +24,9 @@ exports.requestParking =  function(req, res) {
 		    parking.endTime = req.body.endTime;
 		    parking.phoneNumber = req.body.phoneNumber;
 		    parking.answered = false;
-		    parking.canceled = false;        	
+		    parking.canceled = false;
+		    parking.done = false;  
+		    parking.registred = new Date();      	
 		    parking.save(function(err) {
         		if(err) {
             		res.send(err);
@@ -72,20 +69,27 @@ exports.offerParking =  function(req, res) {
 	        		if (err) {
         				res.status(500).send(err);
         			} else {
-        				parking.answered = true;
-        				parking.offerParkingUser = user;
-        				parking.parkingLot = req.body.parkingLot;
-        				parking.save(function (err, updatedParking) {
-				            if (err) {
-				                res.status(500).send(err)
-				            }
+        				if(parking.answered) {
+        					res.send({
+        						'allreadyAnsweredError': true 
+        					})
+        				} else {
+	        				parking.answered = true;
+	        				parking.offerParkingUser = user;
+	        				parking.parkingLot = req.body.parkingLot;
+	        				parking.answeredDate = new Date();
+	        				parking.save(function (err, updatedParking) {
+					            if (err) {
+					                res.status(500).send(err)
+					            }
 
-								pusher.trigger("USER-"+updatedParking.requestUser, 'parking-offer', {
-								  "message": "hello world"
-								});
-								pusher.trigger("global-request-channel", 'request-update', {});
-				            res.send(updatedParking);
-				        });
+									pusher.trigger("USER-"+updatedParking.requestUser, 'parking-offer', {
+									  "message": "Your parking request has been answered"
+									});
+									pusher.trigger("global-request-channel", 'request-update', {});
+					            res.send(updatedParking);
+					        });
+        				}
         			}
 	        	});
 	        }
@@ -99,7 +103,8 @@ exports.getValidRequestForUser = function(req, res) {
         } else {
 			ParkingRequest.find({
 				'requestUser': user,
-				'canceled': false
+				'canceled': false,
+				'done': false
 			}).populate("offerParkingUser").exec(function(err, parking) {
 			        if (err) {
 			            res.send(err);
@@ -117,6 +122,24 @@ exports.cancleParking = function(req, res) {
 			res.status(500).send(err);
 		} else {
 			parking.canceled = true;
+			parking.save(function (err, updatedParking) {
+	            if (err) {
+	                res.status(500).send(err)
+	            }
+	            pusher.trigger("global-request-channel", 'request-update', {});
+	            res.send(updatedParking);
+	        });
+		}
+	});
+
+};
+
+exports.doneParking = function(req, res) {
+	ParkingRequest.findOne({'_id': req.body.parkingId}, function(err, parking) {
+		if (err) {
+			res.status(500).send(err);
+		} else {
+			parking.done = true;
 			parking.save(function (err, updatedParking) {
 	            if (err) {
 	                res.status(500).send(err)
