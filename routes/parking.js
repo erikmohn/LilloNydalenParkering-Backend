@@ -75,7 +75,9 @@ exports.offerParking =  function(req, res) {
         				res.status(500).send(err);
         			} else {
         				if (parking.answered) {
-        					res.status(500).send("Already Answered!");	
+        					res.send({
+        						'alreadyAnswered' : true
+        					});	
         				} else {
 	        				parking.answered = true;
 	        				parking.offerParkingUser = user;
@@ -83,9 +85,7 @@ exports.offerParking =  function(req, res) {
 	        				parking.answeredDate = new Date();
 	        				parking.save(function (err, updatedParking) {
 					            if (err) {
-					                res.send({
-					                	'parkingAlreadyAnswered' : true
-					                })
+					                res.send(err)
 					            }
 
 									pusher.trigger("USER-"+updatedParking.requestUser, 'parking-offer', {
