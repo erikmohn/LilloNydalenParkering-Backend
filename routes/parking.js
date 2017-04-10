@@ -31,7 +31,7 @@ exports.requestParking =  function(req, res) {
 		    parking.answered = false;
 		    parking.canceled = false;
 		    parking.done = false;
-		    parking.registredDate = new Date();        	
+		    parking.registredDate = req.body.registredDate        	
 		    parking.save(function(err) {
         		if(err) {
             		res.send(err);
@@ -44,8 +44,8 @@ exports.requestParking =  function(req, res) {
 					}
 
 					var message = user.userName + " spør etter parkering: \n" +
-					"Fra: " + Moment(new Date(parking.startTime)).locale("nb").format(" dddd HH:mm").capitalizeFirstLetter() + " " +
-					"Til: " + Moment(new Date(parking.endTime)).locale("nb").format(" dddd HH:mm").capitalizeFirstLetter();
+					"Fra: " + Moment(parking.startTime).locale("nb").format(" dddd HH:mm").capitalizeFirstLetter() + " " +
+					"Til: " + Moment(parking.endTime).locale("nb").format(" dddd HH:mm").capitalizeFirstLetter();
 					/*
 					client.sendMessage(message, function(error, response) {
 					     if (error) {
@@ -86,14 +86,14 @@ exports.offerParking =  function(req, res) {
 	        				parking.answered = true;
 	        				parking.offerParkingUser = user;
 	        				parking.parkingLot = req.body.parkingLot;
-	        				parking.answeredDate = new Date();
+	        				parking.answeredDate = req.body.answeredDate;
 	        				parking.save(function (err, updatedParking) {
 					            if (err) {
 					                res.send(err)
 					            }
 
 									pusher.trigger("USER-"+updatedParking.requestUser, 'parking-offer', {
-									  "message": "hello world"
+									  "message": "Update current requests"
 									});
 									pusher.trigger("global-request-channel", 'request-update', {});
 					            res.send(updatedParking);
