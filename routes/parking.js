@@ -12,10 +12,7 @@ var pusher = new Pusher({
   encrypted: true
 });
 
-exports.push = function(req, res) {
-	console.log("Will try to push trough PushWoosh!");
 
-};
 
 exports.requestParking =  function(req, res) {
 	ParkingUser.findOne({ '_id': req.body.userId }, function(err, user) {
@@ -110,64 +107,72 @@ exports.getValidRequestForUser = function(req, res) {
         if (err) {
            return res.send(err);
         } else {
-			ParkingRequest.find({
-				'requestUser': user,
-				'canceled': false,
-				'done': false
-			}).populate("offerParkingUser").exec(function(err, parking) {
-			        if (err) {
-			            res.send(err);
-			        } else {
-			        	res.json(parking);	
-			        }
-			    });
+			ParkingRequest
+				.find({
+					'requestUser': user,
+					'canceled': false,
+					'done': false})
+				.populate("offerParkingUser")
+				.exec(function(err, parking) {
+				        if (err) {
+				            res.send(err);
+				        } else {
+				        	res.json(parking);	
+				        }
+				    });
         }
     });
 };
 
 exports.cancleParking = function(req, res) {
-	ParkingRequest.findOne({'_id': req.body.parkingId}, function(err, parking) {
-		if (err) {
-			res.status(500).send(err);
-		} else {
-			parking.canceled = true;
-			parking.save(function (err, updatedParking) {
-	            if (err) {
-	                res.status(500).send(err)
-	            }
-	            pusher.trigger("global-request-channel", 'request-update', {});
-	            res.send(updatedParking);
-	        });
-		}
-	});
+	ParkingRequest
+		.findOne({'_id': req.body.parkingId})
+		.exec(function(err, parking) {
+				if (err) {
+					res.status(500).send(err);
+				} else {
+					parking.canceled = true;
+					parking.save(function (err, updatedParking) {
+			            if (err) {
+			                res.status(500).send(err)
+			            }
+			            pusher.trigger("global-request-channel", 'request-update', {});
+			            res.send(updatedParking);
+			        });
+				}
+		});
 
 };
 
 exports.doneParking = function(req, res) {
-	ParkingRequest.findOne({'_id': req.body.parkingId}, function(err, parking) {
-		if (err) {
-			res.status(500).send(err);
-		} else {
-			parking.done = true;
-			parking.save(function (err, updatedParking) {
-	            if (err) {
-	                res.status(500).send(err)
-	            }
-	            pusher.trigger("global-request-channel", 'request-update', {});
-	            res.send(updatedParking);
-	        });
-		}
-	});
+	ParkingRequest
+		.findOne({'_id': req.body.parkingId})
+		.exec(function(err, parking) {
+				if (err) {
+					res.status(500).send(err);
+				} else {
+					parking.done = true;
+					parking.save(function (err, updatedParking) {
+			            if (err) {
+			                res.status(500).send(err)
+			            }
+			            pusher.trigger("global-request-channel", 
+			            				'request-update', {});
+			            res.send(updatedParking);
+			        });
+				}
+			});
 
 };
 
 exports.getValidRequests =  function(req, res) {
-        ParkingRequest.find({
+        ParkingRequest
+        		.find({
         			'canceled':false,
         			'answered':false,
-        			'endTime' :{$gt :req.body.now}
-        	}).populate("requestUser")
-        	  .exec(function(err, parkingRequests) {
+        			'endTime' :{$gt :req.body.now}})
+        		.populate("requestUser")
+        	  	.exec(function(err, parkingRequests) {
 	            if (err) {
 	                res.send(err);
 	            } else {
@@ -177,13 +182,62 @@ exports.getValidRequests =  function(req, res) {
 };
 
 exports.getParkingById = function(req, res) {
-ParkingRequest.findOne({
-        			'_id': req.body.parkingId,
-        	}).populate("requestUser")
+ParkingRequest
+			.findOne(
+						{'_id': req.body.parkingId}
+				)
+			.populate("requestUser")
 			.populate("offerParkingUser")
 			.exec(function(err, parkingRequests) {
             if (err)
                 res.send(err);
             res.json(parkingRequests);
         });
+};
+
+exports.getPastRequests = function(req, res) {
+    ParkingUser
+    		.findOne({ '_id' : req.params.userId })
+    		.exec(function(err, user) {
+			        if (err) {
+			           return res.send(err);
+			        } else {
+						ParkingRequest
+							.find()
+							.and([{'requestUser': user},
+									{$or:[
+											{'canceled': true},
+											{'answered': true},
+											{'done': true}
+									]}])
+							.populate("offerParkingUser")
+							.exec(function(err, parking) {
+						        if (err) {
+						            res.send(err);
+						        } else {
+						        	res.json(parking);	
+						        }
+						    });
+			        }
+			    });
+};
+
+exports.getPastOffers = function(req, res) {
+    ParkingUser.findOne({ '_id' : req.params.userId }, function(err, user) {
+        if (err) {
+           return res.send(err);
+        } else {
+			ParkingRequest
+				.find({'offerParkingUser': user})
+				.populate("requestUser")
+				.populate("offerParkingUser")
+				.exec(function(err, parking) {
+			        if (err) {
+			            res.send(err);
+			        } else {
+			        	res.json(parking);	
+			        }
+			    });
+        }
+    });
 };
