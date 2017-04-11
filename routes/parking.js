@@ -197,7 +197,7 @@ ParkingRequest
 
 exports.getPastRequests = function(req, res) {
     ParkingUser
-    		.findOne({ '_id' : req.params.userId })
+    		.findOne({ '_id' : req.body.userId })
     		.exec(function(err, user) {
 			        if (err) {
 			           return res.send(err);
@@ -223,7 +223,7 @@ exports.getPastRequests = function(req, res) {
 };
 
 exports.getPastOffers = function(req, res) {
-    ParkingUser.findOne({ '_id' : req.params.userId }, function(err, user) {
+    ParkingUser.findOne({ '_id' : req.body.userId }, function(err, user) {
         if (err) {
            return res.send(err);
         } else {
