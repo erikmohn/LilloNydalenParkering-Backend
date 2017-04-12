@@ -233,7 +233,9 @@ exports.getPastRequests = function(req, res) {
 							'done': true
 						}]
 					}])
+					.populate("requestUser")
 					.populate("offerParkingUser")
+					.sort({registredDate: 'desc'})
 					.exec(function(err, parking) {
 						if (err) {
 							res.send(err);
@@ -258,6 +260,7 @@ exports.getPastOffers = function(req, res) {
 				})
 				.populate("requestUser")
 				.populate("offerParkingUser")
+				.sort({registredDate: 'desc'})
 				.exec(function(err, parking) {
 					if (err) {
 						res.send(err);
