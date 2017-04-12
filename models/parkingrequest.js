@@ -1,9 +1,15 @@
-var mongoose     = require('mongoose');
-var Schema       = mongoose.Schema;
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
 
 var ParkeringRequestSchema = new Schema({
-    requestUser: [{type: Schema.Types.ObjectId, ref: 'ParkingUser'}],
-    offerParkingUser: [{type: Schema.Types.ObjectId, ref: 'ParkingUser'}],
+    requestUser: [{
+        type: Schema.Types.ObjectId,
+        ref: 'ParkingUser'
+    }],
+    offerParkingUser: [{
+        type: Schema.Types.ObjectId,
+        ref: 'ParkingUser'
+    }],
     regNr: String,
     startTime: Date,
     endTime: Date,

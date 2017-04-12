@@ -6,7 +6,7 @@ app.set('port', (process.env.PORT || 5000));
 var config = require('./config');
 var bodyParser = require('body-parser');
 var morgan = require('morgan')
-var mongoose   = require('mongoose');
+var mongoose = require('mongoose');
 
 //Data models
 var ParkingUser = require('./models/user');
@@ -20,7 +20,9 @@ console.log("Connecting to MongoDB: " + config.mongodb.url);
 
 mongoose.connect(config.mongodb.url);
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({
+	extended: true
+}));
 app.use(bodyParser.json());
 app.use(morgan('combined'))
 
@@ -44,11 +46,10 @@ router.post('/parking/done', parking.doneParking);
 router.get('/parking/user/:userId', parking.getValidRequestForUser);
 
 
-app.get('/', function(request, response) {
-});
+app.get('/', function(request, response) {});
 
 app.use('', router);
 
 app.listen(app.get('port'), function() {
-  console.log('Node app is running on port', app.get('port'));
+	console.log('Node app is running on port', app.get('port'));
 });
