@@ -188,6 +188,7 @@ exports.getValidRequests = function(req, res) {
 			}
 		})
 		.populate("requestUser")
+		.sort({registredDate: 'asc'})
 		.exec(function(err, parkingRequests) {
 			if (err) {
 				res.send(err);
