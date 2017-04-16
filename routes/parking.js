@@ -147,6 +147,7 @@ exports.cancleParking = function(req, res) {
 			if (err) {
 				res.status(500).send(err);
 			} else {
+				console.log("User to push: " + parking.offerParkingUser);
 				parking.canceled = true;
 				parking.save(function(err, updatedParking) {
 					if (err) {
