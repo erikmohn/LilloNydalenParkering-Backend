@@ -114,10 +114,12 @@ exports.offerParking = function(req, res) {
 								]
 							}).exec(function(ongoingParking) {
 								if (ongoingParking) {
+									console.log("Found other parking offered in same time period");
 									res.send({
 										'ongoingParking': true
 									});
 								} else {
+									console.log("No other parking found!");
 									parking.answered = true;
 									parking.offerParkingUser = user;
 									parking.parkingLot = req.body.parkingLot;
