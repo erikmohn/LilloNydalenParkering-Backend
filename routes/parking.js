@@ -131,7 +131,7 @@ exports.offerParking = function(req, res) {
 
 										console.log("Will pusher push to: " + "USER-" + updatedParking.requestUser._id);
 
-										pusher.trigger("USER-" + updatedParking.requestUser._id, 'parking-offer', {
+										pusher.trigger("USER-" + updatedParking.requestUser[0]._id, 'parking-offer', {
 											"message": "Update current requests"
 										});
 										pusher.trigger("global-request-channel", 'request-update', {});
