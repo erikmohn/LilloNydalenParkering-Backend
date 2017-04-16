@@ -149,7 +149,7 @@ exports.cancleParking = function(req, res) {
 			} else {
 
 				if (ENABLE_PUSH) {
-					var pushToken = parking.offerParkingUser.pushToken;
+					var pushToken = parking.offerParkingUser[0].pushToken;
 					//Send push to notify parking canceled
 					console.log("THIS IS THE PARKING" + parking);
 					console.log("WILL PUSH TO THIS CLIENT: " + pushToken);
@@ -190,7 +190,7 @@ exports.doneParking = function(req, res) {
 				//Send push to notify parking done
 				if (ENABLE_PUSH) {
 					var client = new Pushwoosh(PUSH_APP_CODE, PUSH_AUTH_CODE);
-					client.sendMessage('Din utlånte parkering er ferdigstillt', parking.offerParkingUser.pushToken, function(error, response) {
+					client.sendMessage('Din utlånte parkering er ferdigstillt', parking.offerParkingUser[0].pushToken, function(error, response) {
 						if (error) {
 							console.log('Some error occurs: ', error);
 						}
