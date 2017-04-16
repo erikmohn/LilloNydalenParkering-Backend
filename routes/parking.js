@@ -91,32 +91,53 @@ exports.offerParking = function(req, res) {
 								'alreadyAnswered': true
 							});
 						} else {
-							parking.answered = true;
-							parking.offerParkingUser = user;
-							parking.parkingLot = req.body.parkingLot;
-							parking.answeredDate = req.body.answeredDate;
-							parking.save(function(err, updatedParking) {
-								if (err) {
-									res.send(err)
+
+							ParkingRequest.find({
+								'offerParkingUser': req.body.offerUserId,
+								'canceled': false,
+								'done': false,
+								'startTime': {
+									$lt: parking.startTime
+								}
+								'endTime': {
+									$gt: parking.endTime
 								}
 
-								pusher.trigger("USER-" + updatedParking.requestUser._id, 'parking-offer', {
-									"message": "Update current requests"
-								});
-								pusher.trigger("global-request-channel", 'request-update', {});
-
-								var pushToken = parking.requestUser[0].pushToken;
-								if (ENABLE_PUSH && pushToken) {
-									var client = new Pushwoosh(PUSH_APP_CODE, PUSH_AUTH_CODE);
-									client.sendMessage('Du har mottatt et svar på din parkeringsforespørsel', pushToken, function(error, response) {
-										if (error) {
-											console.log('Some error occurs: ', error);
+							}).exec(function(ongoingParking) {
+								if (ongoingParking) {
+									res.send({
+										'ongoingParking': true
+									});
+								} else {
+									parking.answered = true;
+									parking.offerParkingUser = user;
+									parking.parkingLot = req.body.parkingLot;
+									parking.answeredDate = req.body.answeredDate;
+									parking.save(function(err, updatedParking) {
+										if (err) {
+											res.send(err)
 										}
+
+										pusher.trigger("USER-" + updatedParking.requestUser._id, 'parking-offer', {
+											"message": "Update current requests"
+										});
+										pusher.trigger("global-request-channel", 'request-update', {});
+
+										var pushToken = parking.requestUser[0].pushToken;
+										if (ENABLE_PUSH && pushToken) {
+											var client = new Pushwoosh(PUSH_APP_CODE, PUSH_AUTH_CODE);
+											client.sendMessage('Du har mottatt et svar på din parkeringsforespørsel', pushToken, function(error, response) {
+												if (error) {
+													console.log('Some error occurs: ', error);
+												}
+											});
+										}
+
+										res.send(updatedParking);
 									});
 								}
 
-								res.send(updatedParking);
-							});
+							})
 						}
 					}
 				});
