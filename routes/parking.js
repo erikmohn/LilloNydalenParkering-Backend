@@ -151,6 +151,7 @@ exports.cancleParking = function(req, res) {
 				if (ENABLE_PUSH) {
 					var pushToken = parking.offerParkingUser.pushToken;
 					//Send push to notify parking canceled
+					console.log("THIS IS THE PARKING" + parking);
 					console.log("WILL PUSH TO THIS CLIENT: " + pushToken);
 					var client = new Pushwoosh(PUSH_APP_CODE, PUSH_AUTH_CODE);
 					client.sendMessage('Din utlånte parkering er avbrutt', pushToken, function(error, response) {
