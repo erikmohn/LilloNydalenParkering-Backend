@@ -39,27 +39,26 @@ exports.requestParking = function(req, res) {
 				if (err) {
 					res.send(err);
 				} else {
+					if (ENABLE_PUSH) {
+						var client = new Pushwoosh(PUSH_APP_CODE, PUSH_AUTH_CODE);
 
-					var client = new Pushwoosh(PUSH_APP_CODE, PUSH_AUTH_CODE);
+						String.prototype.capitalizeFirstLetter = function() {
+							return this.charAt(0).toUpperCase() + this.slice(1);
+						}
 
-					String.prototype.capitalizeFirstLetter = function() {
-						return this.charAt(0).toUpperCase() + this.slice(1);
+						var message = user.userName + " spør etter parkering: \n" +
+							"Fra: " + Moment(parking.startTime).locale("nb").format(" dddd HH:mm").capitalizeFirstLetter() + " " +
+							"Til: " + Moment(parking.endTime).locale("nb").format(" dddd HH:mm").capitalizeFirstLetter();
+
+						client.sendMessage(message, function(error, response) {
+							if (error) {
+								console.log('Some error occurs: ', error);
+							}
+						});
+
+
+						pusher.trigger("global-request-channel", 'request-update', {});
 					}
-
-					var message = user.userName + " spør etter parkering: \n" +
-						"Fra: " + Moment(parking.startTime).locale("nb").format(" dddd HH:mm").capitalizeFirstLetter() + " " +
-						"Til: " + Moment(parking.endTime).locale("nb").format(" dddd HH:mm").capitalizeFirstLetter();
-					/*
-					client.sendMessage(message, function(error, response) {
-					     if (error) {
-					        console.log('Some error occurs: ', error);
-					     }
-
-					     console.log("Push sendt!");
-					});
-					*/
-
-					pusher.trigger("global-request-channel", 'request-update', {});
 
 					res.json({
 						message: 'Parking request saved!',
