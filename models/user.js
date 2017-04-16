@@ -8,7 +8,6 @@ var UserSchema = new Schema({
 	parkingSpace: String,
 	regnr: String,
 	epost: String,
-	devicePushId: String,
 	activated: Boolean,
 	pushToken: String
 });

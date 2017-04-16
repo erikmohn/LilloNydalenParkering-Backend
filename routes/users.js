@@ -13,9 +13,8 @@ exports.saveUser = function(req, res) {
         user.parkingSpace = req.body.parkingSpace;
         user.regnr = req.body.regnr;
         user.epost = req.body.epost;
-        user.devicePushId = req.body.devicePushId;
         user.activated = true;
-        user.pushToken = localStorage.getItem("pushToken")
+        user.pushToken = req.body.pushToken;
 
         user.save(function(err) {
             if (err)
