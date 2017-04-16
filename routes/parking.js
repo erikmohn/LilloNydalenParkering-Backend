@@ -98,11 +98,10 @@ exports.offerParking = function(req, res) {
 								'done': false,
 								'startTime': {
 									$lt: parking.startTime
-								}
+								},
 								'endTime': {
 									$gt: parking.endTime
 								}
-
 							}).exec(function(ongoingParking) {
 								if (ongoingParking) {
 									res.send({
