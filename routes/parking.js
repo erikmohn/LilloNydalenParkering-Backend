@@ -96,12 +96,22 @@ exports.offerParking = function(req, res) {
 								'offerParkingUser': req.body.offerUserId,
 								'canceled': false,
 								'done': false,
-								'startTime': {
-									$lt: parking.startTime
-								},
-								'endTime': {
-									$gt: parking.endTime
-								}
+								'$or': [{
+										'startTime': {
+											$lt: parking.startTime
+										},
+										'startTime': parking.startTime
+									}
+
+								],
+								'$or': [{
+										'endTime': {
+											$gt: parking.endTime
+										},
+										'endTime': parking.endTime
+									}
+
+								]
 							}).exec(function(ongoingParking) {
 								if (ongoingParking) {
 									res.send({
