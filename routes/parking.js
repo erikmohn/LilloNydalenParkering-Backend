@@ -93,65 +93,67 @@ exports.offerParking = function(req, res) {
 						} else {
 
 							ParkingRequest.find({
-								'offerParkingUser': req.body.offerUserId,
-								'canceled': false,
-								'done': false,
-								'$or': [{
-										'startTime': {
-											$lt: parking.startTime
-										},
-										'startTime': parking.startTime
-									}
+									'offerParkingUser': req.body.offerUserId,
+									'canceled': false,
+									'done': false,
+									'$and': [{
+										'$or': [{
+												'startTime': {
+													$lt: parking.startTime
+												},
+												'startTime': parking.startTime
+											}
 
-								],
-								'$or': [{
-										'endTime': {
-											$gt: parking.endTime
-										},
-										'endTime': parking.endTime
-									}
-
-								]
-							}).exec(function(ongoingParking) {
-								if (ongoingParking) {
-									console.log("Found other parking offered in same time period");
-									res.send({
-										'ongoingParking': true
-									});
-								} else {
-									console.log("No other parking found!");
-									parking.answered = true;
-									parking.offerParkingUser = user;
-									parking.parkingLot = req.body.parkingLot;
-									parking.answeredDate = req.body.answeredDate;
-									parking.save(function(err, updatedParking) {
-										if (err) {
-											res.send(err)
+										]
+									}, {
+										'$or': [{
+												'endTime': {
+													$gt: parking.endTime
+												},
+												'endTime': parking.endTime
+											}]
 										}
-										console.log();
-										console.log(parking);
-										console.log("Will pusher push to: " + "USER-" + parking.requestUser[0]._id);
-
-										pusher.trigger("USER-" + updatedParking.requestUser[0]._id, 'parking-offer', {
-											"message": "Update current requests"
+								]})
+								.exec(function(ongoingParking) {
+									if (ongoingParking) {
+										console.log("Found other parking offered in same time period");
+										res.send({
+											'ongoingParking': true
 										});
-										pusher.trigger("global-request-channel", 'request-update', {});
+									} else {
+										console.log("No other parking found!");
+										parking.answered = true;
+										parking.offerParkingUser = user;
+										parking.parkingLot = req.body.parkingLot;
+										parking.answeredDate = req.body.answeredDate;
+										parking.save(function(err, updatedParking) {
+											if (err) {
+												res.send(err)
+											}
+											console.log();
+											console.log(parking);
+											console.log("Will pusher push to: " + "USER-" + parking.requestUser[0]._id);
 
-										var pushToken = parking.requestUser[0].pushToken;
-										if (ENABLE_PUSH && pushToken) {
-											var client = new Pushwoosh(PUSH_APP_CODE, PUSH_AUTH_CODE);
-											client.sendMessage('Du har mottatt et svar på din parkeringsforespørsel', pushToken, function(error, response) {
-												if (error) {
-													console.log('Some error occurs: ', error);
-												}
+											pusher.trigger("USER-" + updatedParking.requestUser[0]._id, 'parking-offer', {
+												"message": "Update current requests"
 											});
-										}
+											pusher.trigger("global-request-channel", 'request-update', {});
 
-										res.send(updatedParking);
-									});
-								}
+											var pushToken = parking.requestUser[0].pushToken;
+											if (ENABLE_PUSH && pushToken) {
+												var client = new Pushwoosh(PUSH_APP_CODE, PUSH_AUTH_CODE);
+												client.sendMessage('Du har mottatt et svar på din parkeringsforespørsel', pushToken, function(error, response) {
+													if (error) {
+														console.log('Some error occurs: ', error);
+													}
+												});
+											}
 
-							})
+											res.send(updatedParking);
+										});
+									}
+
+								})
 						}
 					}
 				});
