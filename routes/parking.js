@@ -93,14 +93,13 @@ exports.offerParking = function(req, res) {
 						} else {
 
 							ParkingRequest.find({
+									'_id': {
+										$ne: req.body.parkingId
+									},
+									'offerParkingUser': user,
+									'canceled': false,
+									'done': false/*,
 									'$and': [{
-										'_id': {
-											$ne: req.body.parkingId
-										},
-										'offerParkingUser': user,
-										'canceled': false,
-										'done': false,
-									}/*, {
 										'$or': [{
 												'startTime': {
 													$lt: parking.startTime
@@ -116,7 +115,7 @@ exports.offerParking = function(req, res) {
 											},
 											'endTime': parking.endTime
 										}]
-									}*/]
+									}]*/
 								})
 								.exec(function(onGoingErr, ongoingParking) {
 									if (onGoingErr) {
