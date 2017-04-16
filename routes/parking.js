@@ -93,7 +93,7 @@ exports.offerParking = function(req, res) {
 						} else {
 
 							ParkingRequest.find({
-									'offerParkingUser._id': req.body.offerUserId/*,
+									'offerParkingUser': user/*,
 									'canceled': false,
 									'done': false,
 									'$and': [{
