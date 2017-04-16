@@ -1,6 +1,6 @@
 {
-  "name": "fernanda-nissen-parkering-backend",
-  "description": "Backend services for Fernanda nissen parkering ",
+  "name": "lillo-nydalen-parkering",
+  "description": "Backend services for Lillo nydalen parkering ",
   "license": "MIT",
   "author": "Erik Mohn",
   "version": "0.0.1",
@@ -14,6 +14,7 @@
     "cross-env": "^1.0.7",
     "express": "~4.13.4",
     "moment": "2.13.0",
+    "moment-timezone": "0.5.13",
     "mongoose": "~4.4.14",
     "morgan": "1.7.0",
     "pusher": "1.5.1",
