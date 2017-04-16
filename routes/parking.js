@@ -93,8 +93,8 @@ exports.offerParking = function(req, res) {
 						} else {
 
 							ParkingRequest.find({
-									//'offerParkingUser': user,
-									'answered': true/*,
+									/*//'offerParkingUser': user,
+									//'answered': true,
 									'done': false,
 									'$and': [{
 										'$or': [{
