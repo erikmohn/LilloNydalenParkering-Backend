@@ -46,7 +46,7 @@ exports.requestParking = function(req, res) {
 							return this.charAt(0).toUpperCase() + this.slice(1);
 						}
 
-						console.log(moment.tz.names());
+						console.log(Moment.tz.names());
 
 						var message = user.userName + " spør etter parkering: \n" +
 							"Fra: " + Moment(parking.startTime).tz("America/Toronto").locale("nb").format(" dddd HH:mm").capitalizeFirstLetter() + " " +
