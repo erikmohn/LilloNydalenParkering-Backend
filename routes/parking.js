@@ -93,8 +93,8 @@ exports.offerParking = function(req, res) {
 						} else {
 
 							ParkingRequest.find({
-									'$ne': {
-										'_id': req.body.parkingId
+									'_id': {
+										$ne: req.body.parkingId
 									},
 									'offerParkingUser': user,
 									'canceled': false,
