@@ -93,8 +93,8 @@ exports.offerParking = function(req, res) {
 						} else {
 
 							ParkingRequest.find({
-									'offerParkingUser': user/*,
-									'canceled': false,
+									//'offerParkingUser': user,
+									'canceled': false/*,
 									'done': false,
 									'$and': [{
 										'$or': [{
