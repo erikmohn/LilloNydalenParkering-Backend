@@ -113,8 +113,12 @@ exports.offerParking = function(req, res) {
 												'endTime': parking.endTime
 											}]
 										}
-								]*/})
-								.exec(function(ongoingParking) {
+								]*/
+								})
+								.exec(function(onGoingErr, ongoingParking) {
+									if (onGoingErr) {
+										res.status(500).send(onGoingErr);
+									}
 									console.log(ongoingParking);
 									if (ongoingParking) {
 										console.log("Found other parking offered in same time period");
