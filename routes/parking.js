@@ -93,9 +93,9 @@ exports.offerParking = function(req, res) {
 						} else {
 
 							ParkingRequest.find({
-									'offerParkingUser': req.body.offerUserId,
+									'offerParkingUser._id': req.body.offerUserId,
 									'canceled': false,
-									'done': false/*,
+									'done': false,
 									'$and': [{
 										'$or': [{
 												'startTime': {
@@ -113,7 +113,7 @@ exports.offerParking = function(req, res) {
 												'endTime': parking.endTime
 											}]
 										}
-								]*/})
+								]})
 								.exec(function(ongoingParking) {
 									if (ongoingParking) {
 										console.log("Found other parking offered in same time period");
