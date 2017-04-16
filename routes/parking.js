@@ -93,6 +93,9 @@ exports.offerParking = function(req, res) {
 						} else {
 
 							ParkingRequest.find({
+									'$not': {
+										'_id': req.body.parkingId
+									}
 									'offerParkingUser': user,
 									'canceled': false,
 									'done': false,
@@ -107,26 +110,22 @@ exports.offerParking = function(req, res) {
 										]
 									}, {
 										'$or': [{
-												'endTime': {
-													$gt: parking.endTime
-												},
-												'endTime': parking.endTime
-											}]
-										}
-								]
+											'endTime': {
+												$gt: parking.endTime
+											},
+											'endTime': parking.endTime
+										}]
+									}]
 								})
 								.exec(function(onGoingErr, ongoingParking) {
 									if (onGoingErr) {
 										res.status(500).send(onGoingErr);
 									}
-									console.log(ongoingParking);
 									if (ongoingParking) {
-										console.log("Found other parking offered in same time period");
 										res.send({
 											'ongoingParking': true
 										});
 									} else {
-										console.log("No other parking found!");
 										parking.answered = true;
 										parking.offerParkingUser = user;
 										parking.parkingLot = req.body.parkingLot;
