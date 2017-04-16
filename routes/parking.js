@@ -95,7 +95,7 @@ exports.offerParking = function(req, res) {
 							ParkingRequest.find({
 									'offerParkingUser': req.body.offerUserId,
 									'canceled': false,
-									'done': false,
+									'done': false/*,
 									'$and': [{
 										'$or': [{
 												'startTime': {
@@ -113,7 +113,7 @@ exports.offerParking = function(req, res) {
 												'endTime': parking.endTime
 											}]
 										}
-								]})
+								]*/})
 								.exec(function(ongoingParking) {
 									if (ongoingParking) {
 										console.log("Found other parking offered in same time period");
@@ -130,9 +130,6 @@ exports.offerParking = function(req, res) {
 											if (err) {
 												res.send(err)
 											}
-											console.log();
-											console.log(parking);
-											console.log("Will pusher push to: " + "USER-" + parking.requestUser[0]._id);
 
 											pusher.trigger("USER-" + updatedParking.requestUser[0]._id, 'parking-offer', {
 												"message": "Update current requests"
