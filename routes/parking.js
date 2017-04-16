@@ -94,7 +94,7 @@ exports.offerParking = function(req, res) {
 
 							ParkingRequest.find({
 									//'offerParkingUser': user,
-									'canceled': false/*,
+									'answered': true/*,
 									'done': false,
 									'$and': [{
 										'$or': [{
@@ -115,6 +115,7 @@ exports.offerParking = function(req, res) {
 										}
 								]*/})
 								.exec(function(ongoingParking) {
+									console.log(ongoingParking);
 									if (ongoingParking) {
 										console.log("Found other parking offered in same time period");
 										res.send({
