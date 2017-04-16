@@ -100,7 +100,7 @@ exports.offerParking = function(req, res) {
 										'offerParkingUser': user,
 										'canceled': false,
 										'done': false,
-									}, {
+									}/*, {
 										'$or': [{
 												'startTime': {
 													$lt: parking.startTime
@@ -116,7 +116,7 @@ exports.offerParking = function(req, res) {
 											},
 											'endTime': parking.endTime
 										}]
-									}]
+									}*/]
 								})
 								.exec(function(onGoingErr, ongoingParking) {
 									if (onGoingErr) {
