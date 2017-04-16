@@ -81,6 +81,7 @@ exports.offerParking = function(req, res) {
 			ParkingRequest.findOne({
 					'_id': req.body.parkingId
 				})
+				.populate("requestUser")
 				.exec(function(err, parking) {
 					if (err) {
 						res.status(500).send(err);
@@ -104,7 +105,7 @@ exports.offerParking = function(req, res) {
 								});
 								pusher.trigger("global-request-channel", 'request-update', {});
 
-								var pushToken = parking.offerParkingUser[0].pushToken;
+								var pushToken = parking.requestUser[0].pushToken;
 								if (ENABLE_PUSH && pushToken) {
 									var client = new Pushwoosh(PUSH_APP_CODE, PUSH_AUTH_CODE);
 									client.sendMessage('Du har mottatt et svar på din parkeringsforespørsel', pushToken, function(error, response) {
