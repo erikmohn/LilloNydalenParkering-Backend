@@ -147,26 +147,27 @@ exports.cancleParking = function(req, res) {
 			if (err) {
 				res.status(500).send(err);
 			} else {
-				var pushToken = parking.offerParkingUser.pushToken;
+				
 				parking.canceled = true;
+				
+				if (ENABLE_PUSH) {
+					var pushToken = parking.offerParkingUser.pushToken;
+					//Send push to notify parking canceled
+					var client = new Pushwoosh(PUSH_APP_CODE, PUSH_AUTH_CODE);
+					client.sendMessage('Din utlånte parkering er avbrutt', pushToken, function(error, response) {
+						if (error) {
+							console.log('Some error occurs: ', error);
+						}
+
+						console.log("Push sendt!");
+					});
+				}
+
 				parking.save(function(err, updatedParking) {
 					if (err) {
 						res.status(500).send(err)
 					}
 					pusher.trigger("global-request-channel", 'request-update', {});
-
-					if (ENABLE_PUSH) {
-						//Send push to notify parking canceled
-						var client = new Pushwoosh(PUSH_APP_CODE, PUSH_AUTH_CODE);
-						console.log("Should notify only: " + pushToken);
-						client.sendMessage('Din utlånte parkering er avbrutt', pushToken, function(error, response) {
-							if (error) {
-								console.log('Some error occurs: ', error);
-							}
-
-							console.log("Push sendt!");
-						});
-					}
 
 					res.send(updatedParking);
 				});
@@ -195,8 +196,7 @@ exports.doneParking = function(req, res) {
 					//Send push to notify parking done
 					if (ENABLE_PUSH) {
 						var client = new Pushwoosh(PUSH_APP_CODE, PUSH_AUTH_CODE);
-						client.sendMessage('Din utlånte parkering er ferdigstillt'
-							, parking.offerParkingUser.pushToken, function(error, response) {
+						client.sendMessage('Din utlånte parkering er ferdigstillt', parking.offerParkingUser.pushToken, function(error, response) {
 							if (error) {
 								console.log('Some error occurs: ', error);
 							}
