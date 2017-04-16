@@ -122,7 +122,8 @@ exports.offerParking = function(req, res) {
 										console.log("FAILED!!!! " + onGoingErr);
 										//res.status(500).send(onGoingErr);
 									}
-
+									console.log("FOUND THIS!");
+									console.log(ongoingParking);
 									if (ongoingParking) {
 										res.send({
 											'ongoingParking': true
