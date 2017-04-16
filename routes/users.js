@@ -15,6 +15,7 @@ exports.saveUser = function(req, res) {
         user.epost = req.body.epost;
         user.devicePushId = req.body.devicePushId;
         user.activated = true;
+        user.pushToken = localStorage.getItem("pushToken")
 
         user.save(function(err) {
             if (err)

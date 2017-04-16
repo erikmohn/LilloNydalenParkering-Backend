@@ -9,7 +9,8 @@ var UserSchema = new Schema({
 	regnr: String,
 	epost: String,
 	devicePushId: String,
-	activated: Boolean
+	activated: Boolean,
+	pushToken: String
 });
 
 module.exports = mongoose.model('ParkingUser', UserSchema);

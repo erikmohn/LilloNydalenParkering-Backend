@@ -12,6 +12,10 @@ var pusher = new Pusher({
 	encrypted: true
 });
 
+var ENABLE_PUSH = true;
+
+var PUSH_APP_CODE = "2D52E-A279A";
+var PUSH_AUTH_CODE = "10kqID2h62E4Gn4Ax38TifJKxUmZtbtgbUlrQQRDWhVhNH27JqMymGtRXNv1xCbWAOKzlEJa7XZPiS6yB0Bc";
 
 
 exports.requestParking = function(req, res) {
@@ -36,7 +40,7 @@ exports.requestParking = function(req, res) {
 					res.send(err);
 				} else {
 
-					var client = new Pushwoosh("2D52E-A279A", "10kqID2h62E4Gn4Ax38TifJKxUmZtbtgbUlrQQRDWhVhNH27JqMymGtRXNv1xCbWAOKzlEJa7XZPiS6yB0Bc");
+					var client = new Pushwoosh(PUSH_APP_CODE, PUSH_AUTH_CODE);
 
 					String.prototype.capitalizeFirstLetter = function() {
 						return this.charAt(0).toUpperCase() + this.slice(1);
@@ -138,6 +142,7 @@ exports.cancleParking = function(req, res) {
 		.findOne({
 			'_id': req.body.parkingId
 		})
+		.populate("offerParkingUser")
 		.exec(function(err, parking) {
 			if (err) {
 				res.status(500).send(err);
@@ -148,6 +153,20 @@ exports.cancleParking = function(req, res) {
 						res.status(500).send(err)
 					}
 					pusher.trigger("global-request-channel", 'request-update', {});
+
+					if (ENABLE_PUSH) {
+						//Send push to notify parking canceled
+						var client = new Pushwoosh(PUSH_APP_CODE, PUSH_AUTH_CODE);
+
+						client.sendMessage('Din utlånte parkering er avbrutt', function(error, response) {
+							if (error) {
+								console.log('Some error occurs: ', error);
+							}
+
+							console.log("Push sendt!");
+						});
+					}
+
 					res.send(updatedParking);
 				});
 			}
@@ -160,6 +179,7 @@ exports.doneParking = function(req, res) {
 		.findOne({
 			'_id': req.body.parkingId
 		})
+		.populate("offerParkingUser")
 		.exec(function(err, parking) {
 			if (err) {
 				res.status(500).send(err);
@@ -171,6 +191,19 @@ exports.doneParking = function(req, res) {
 					}
 					pusher.trigger("global-request-channel",
 						'request-update', {});
+					//Send push to notify parking done
+					if (ENABLE_PUSH) {
+						var client = new Pushwoosh(PUSH_APP_CODE, PUSH_AUTH_CODE);
+						client.sendMessage('Din utlånte parkering er ferdigstillt'
+							, parking.offerParkingUser.pushToken, function(error, response) {
+							if (error) {
+								console.log('Some error occurs: ', error);
+							}
+
+							console.log("Push sendt!");
+						});
+					}
+
 					res.send(updatedParking);
 				});
 			}
@@ -188,7 +221,9 @@ exports.getValidRequests = function(req, res) {
 			}
 		})
 		.populate("requestUser")
-		.sort({registredDate: 'asc'})
+		.sort({
+			registredDate: 'asc'
+		})
 		.exec(function(err, parkingRequests) {
 			if (err) {
 				res.send(err);
@@ -236,7 +271,9 @@ exports.getPastRequests = function(req, res) {
 					}])
 					.populate("requestUser")
 					.populate("offerParkingUser")
-					.sort({registredDate: 'desc'})
+					.sort({
+						registredDate: 'desc'
+					})
 					.exec(function(err, parking) {
 						if (err) {
 							res.send(err);
@@ -261,7 +298,9 @@ exports.getPastOffers = function(req, res) {
 				})
 				.populate("requestUser")
 				.populate("offerParkingUser")
-				.sort({registredDate: 'desc'})
+				.sort({
+					registredDate: 'desc'
+				})
 				.exec(function(err, parking) {
 					if (err) {
 						res.send(err);
