@@ -98,7 +98,7 @@ exports.offerParking = function(req, res) {
 									},
 									'offerParkingUser': user,
 									'canceled': false,
-									'done': false/*,
+									'done': false,
 									'$and': [{
 										'$or': [{
 												'startTime': {
@@ -115,16 +115,15 @@ exports.offerParking = function(req, res) {
 											},
 											'endTime': parking.endTime
 										}]
-									}]*/
+									}]
 								})
 								.exec(function(onGoingErr, ongoingParking) {
 									if (onGoingErr) {
 										console.log("FAILED!!!! " + onGoingErr);
 										//res.status(500).send(onGoingErr);
 									}
-									console.log("FOUND THIS!");
-									console.log(ongoingParking);
-									if (ongoingParking) {
+									console.log(ongoingParking.length > 0);
+									if (ongoingParking.length > 0) {
 										res.send({
 											'ongoingParking': true
 										});
