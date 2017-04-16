@@ -128,8 +128,9 @@ exports.offerParking = function(req, res) {
 										if (err) {
 											res.send(err)
 										}
-										console.log()
-										console.log("Will pusher push to: " + "USER-" + parking.requestUser._id);
+										console.log();
+										console.log(parking);
+										console.log("Will pusher push to: " + "USER-" + parking.requestUser[0]._id);
 
 										pusher.trigger("USER-" + updatedParking.requestUser[0]._id, 'parking-offer', {
 											"message": "Update current requests"
