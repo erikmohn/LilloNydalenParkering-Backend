@@ -95,7 +95,7 @@ exports.offerParking = function(req, res) {
 							ParkingRequest.find({
 									'$not': {
 										'_id': req.body.parkingId
-									}
+									},
 									'offerParkingUser': user,
 									'canceled': false,
 									'done': false,
