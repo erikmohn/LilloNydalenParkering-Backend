@@ -138,7 +138,8 @@ exports.offerParking = function(req, res) {
 											}
 
 											pusher.trigger("USER-" + updatedParking.requestUser[0]._id, 'parking-offer', {
-												"message": "Update current requests"
+												"message": "Update current requests",
+												"parkingAnswered": true
 											});
 											pusher.trigger("global-request-channel", 'request-update', {});
 
