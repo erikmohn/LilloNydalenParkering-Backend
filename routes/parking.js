@@ -210,6 +210,8 @@ exports.cancleParking = function(req, res) {
 						res.status(500).send(err)
 					}
 					pusher.trigger("global-request-channel", 'request-update', {});
+					console.log();
+					console.log("PUSH TOKEN: " + pushToken);
 					if (ENABLE_PUSH && pushToken) {
 						var pushToken = parking.offerParkingUser[0].pushToken;
 						var client = new Pushwoosh(PUSH_APP_CODE, PUSH_AUTH_CODE);
@@ -245,6 +247,8 @@ exports.doneParking = function(req, res) {
 						'request-update', {});
 					res.send(updatedParking);
 					var pushToken = parking.offerParkingUser[0].pushToken;
+					console.log();
+					console.log("PUSH TOKEN: " + pushToken);
 					if (ENABLE_PUSH && pushToken) {
 						var client = new Pushwoosh(PUSH_APP_CODE, PUSH_AUTH_CODE);
 						client.sendMessage('Din utlånte parkering er ferdigstillt', pushToken, function(error, response) {
