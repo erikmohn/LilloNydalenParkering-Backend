@@ -199,6 +199,7 @@ exports.cancleParking = function(req, res) {
 		.findOne({
 			'_id': req.body.parkingId
 		})
+		.populate("requestUser")
 		.populate("offerParkingUser")
 		.exec(function(err, parking) {
 			if (err) {
@@ -210,7 +211,12 @@ exports.cancleParking = function(req, res) {
 						res.status(500).send(err)
 					}
 					pusher.trigger("global-request-channel", 'request-update', {});
-					console.log();
+
+					pusher.trigger("USER-" + parking.offerParkingUser[0]._id, 'parking-offer', {
+						"message": "Update current requests",
+						"parkingCanceled": true,
+						"msg": parking.requestUser[0].userName + " har avbrutt bruken av din parkeringsplass"
+					});
 
 					var pushToken = parking.offerParkingUser[0].pushToken;
 					if (ENABLE_PUSH && pushToken) {
@@ -233,6 +239,7 @@ exports.doneParking = function(req, res) {
 		.findOne({
 			'_id': req.body.parkingId
 		})
+		.populate("requestUser")
 		.populate("offerParkingUser")
 		.exec(function(err, parking) {
 			if (err) {
@@ -246,9 +253,14 @@ exports.doneParking = function(req, res) {
 					pusher.trigger("global-request-channel",
 						'request-update', {});
 					res.send(updatedParking);
+
+					pusher.trigger("USER-" + parking.offerParkingUser[0]._id, 'parking-offer', {
+						"message": "Update current requests",
+						"parkingDone": true,
+						"msg": parking.requestUser[0].userName + " er ferdig med parkeringsplassen din"
+					});
+
 					var pushToken = parking.offerParkingUser[0].pushToken;
-					console.log();
-					console.log("PUSH TOKEN: " + pushToken);
 					if (ENABLE_PUSH && pushToken) {
 						var client = new Pushwoosh(PUSH_APP_CODE, PUSH_AUTH_CODE);
 						client.sendMessage('Din utlånte parkering er ferdigstillt', pushToken, function(error, response) {
