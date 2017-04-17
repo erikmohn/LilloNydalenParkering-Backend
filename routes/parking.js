@@ -302,13 +302,13 @@ exports.getPastRequests = function(req, res) {
 				return res.send(err);
 			} else {
 				ParkingRequest
-					.find(
+					.find({
 						'$or': [{
 							'requestUser': user
 						}, {
 							'offerParkingUser': user
 						}]
-					).
+					}).
 					.populate("requestUser")
 					.populate("offerParkingUser")
 					.sort({
