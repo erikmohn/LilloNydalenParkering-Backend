@@ -57,7 +57,7 @@ exports.requestParking = function(req, res) {
 						});
 
 
-						
+
 					}
 
 					pusher.trigger("global-request-channel", 'request-update', {});
@@ -302,18 +302,14 @@ exports.getPastRequests = function(req, res) {
 				return res.send(err);
 			} else {
 				ParkingRequest
-					.find()
-					.and([{
-						'requestUser': user
-					}, {
-						$or: [{
-							'canceled': true
+					.find(
+						'$or': [{
+							'requestUser': user
 						}, {
-							'answered': true
-						}, {
-							'done': true
+							'offerParkingUser': user
 						}]
-					}])
+
+					)
 					.populate("requestUser")
 					.populate("offerParkingUser")
 					.sort({
