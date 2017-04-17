@@ -170,7 +170,7 @@ exports.getValidRequestForUser = function(req, res) {
 	ParkingUser.findOne({
 		'_id': req.body.userId,
 		'endTime': {
-			$lt: req.body.now
+			$gt: req.body.now
 		}
 	}, function(err, user) {
 		if (err) {
