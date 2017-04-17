@@ -12,7 +12,7 @@ var pusher = new Pusher({
 	encrypted: true
 });
 
-var ENABLE_PUSH = true;
+var ENABLE_PUSH = false;
 
 var PUSH_APP_CODE = "2D52E-A279A";
 var PUSH_AUTH_CODE = "10kqID2h62E4Gn4Ax38TifJKxUmZtbtgbUlrQQRDWhVhNH27JqMymGtRXNv1xCbWAOKzlEJa7XZPiS6yB0Bc";
