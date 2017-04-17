@@ -308,8 +308,7 @@ exports.getPastRequests = function(req, res) {
 						}, {
 							'offerParkingUser': user
 						}]
-
-					)
+					).
 					.populate("requestUser")
 					.populate("offerParkingUser")
 					.sort({
