@@ -303,7 +303,7 @@ exports.getPastRequests = function(req, res) {
 			} else {
 				ParkingRequest
 					.find(
-						$or: [{
+						'$or': [{
 							'requestUser': user
 						}, {
 							'offerParkingUser': user
