@@ -211,9 +211,9 @@ exports.cancleParking = function(req, res) {
 					}
 					pusher.trigger("global-request-channel", 'request-update', {});
 					console.log();
-					console.log("PUSH TOKEN: " + pushToken);
+
+					var pushToken = parking.offerParkingUser[0].pushToken;
 					if (ENABLE_PUSH && pushToken) {
-						var pushToken = parking.offerParkingUser[0].pushToken;
 						var client = new Pushwoosh(PUSH_APP_CODE, PUSH_AUTH_CODE);
 						client.sendMessage('Din utlånte parkering er avbrutt', pushToken, function(error, response) {
 							if (error) {
