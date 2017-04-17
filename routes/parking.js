@@ -57,8 +57,10 @@ exports.requestParking = function(req, res) {
 						});
 
 
-						pusher.trigger("global-request-channel", 'request-update', {});
+						
 					}
+
+					pusher.trigger("global-request-channel", 'request-update', {});
 
 					res.json({
 						message: 'Parking request saved!',
