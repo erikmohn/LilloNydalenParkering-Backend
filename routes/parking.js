@@ -168,10 +168,7 @@ exports.offerParking = function(req, res) {
 
 exports.getValidRequestForUser = function(req, res) {
 	ParkingUser.findOne({
-		'_id': req.body.userId,
-		'endTime': {
-			$gt: req.body.now
-		}
+		'_id': req.body.userId
 	}, function(err, user) {
 		if (err) {
 			return res.send(err);
@@ -180,7 +177,10 @@ exports.getValidRequestForUser = function(req, res) {
 				.find({
 					'requestUser': user,
 					'canceled': false,
-					'done': false
+					'done': false,
+					'endTime': {
+						$gt: req.body.now
+					}
 				})
 				.populate("offerParkingUser")
 				.exec(function(err, parking) {
