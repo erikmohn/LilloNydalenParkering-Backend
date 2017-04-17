@@ -38,12 +38,11 @@ router.post('/parking/requests', parking.getValidRequests);
 router.post('/parking/requests/past', parking.getPastRequests);
 
 router.post('/parking/offer', parking.offerParking);
-router.post('/parking/offers/past', parking.getPastOffers);
 
 router.post('/parking/cancle', parking.cancleParking);
 router.post('/parking/done', parking.doneParking);
 
-router.get('/parking/user/:userId', parking.getValidRequestForUser);
+router.post('/parking/user', parking.getValidRequestForUser);
 
 
 app.get('/', function(request, response) {});
