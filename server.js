@@ -43,6 +43,7 @@ router.post('/parking/cancle', parking.cancleParking);
 router.post('/parking/done', parking.doneParking);
 
 router.post('/parking/user', parking.getValidRequestForUser);
+router.post('/parking/user/email', parking.getUserByEmail);
 
 
 app.get('/', function(request, response) {});

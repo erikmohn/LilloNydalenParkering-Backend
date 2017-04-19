@@ -36,3 +36,14 @@ exports.getUser = function(req, res) {
         res.json(user);
     });
 };
+
+exports.getUserByEmail = function(req, res) {
+    ParkingUser.findOne({
+        '_id': req.params.email
+        'password' : req.params.password
+    }, function(err, user) {
+        if (err)
+            return res.send(err);
+        res.json(user);
+    });
+};
