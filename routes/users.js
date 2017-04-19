@@ -40,11 +40,11 @@ exports.getUser = function(req, res) {
 exports.getUserByEmail = function(req, res) {
     ParkingUser
         .findOne({
-            '_id': req.body.email,
-            'password': req.body.password
+            '_id': req.body.email
         })
         .exec(function(err, user) {
-            
+            console.log("Password: " + req.body.password);
+            console.log("Password: " + user.password);
             if (err)
                 res.send(err);
             res.json(user);
