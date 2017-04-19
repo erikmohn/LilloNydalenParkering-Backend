@@ -44,8 +44,6 @@ exports.getUserByEmail = function(req, res) {
             'password': req.body.password
         })
         .exec(function(err, user) {
-            console.log("Password: " + req.body.password);
-            console.log("Password: " + user.password);
             if (err)
                 res.send(err);
             res.json(user);
