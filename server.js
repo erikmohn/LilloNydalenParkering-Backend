@@ -30,7 +30,7 @@ var router = express.Router();
 
 router.post('/user/save', users.saveUser);
 router.get('/user/:userId', users.getUser);
-router.post('/user/email', parking.getUserByEmail);
+router.post('/user/email', users.getUserByEmail);
 
 router.post('/parking', parking.getParkingById);
 router.post('/parking/request', parking.requestParking);
