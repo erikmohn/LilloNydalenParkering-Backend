@@ -30,6 +30,7 @@ var router = express.Router();
 
 router.post('/user/save', users.saveUser);
 router.get('/user/:userId', users.getUser);
+router.post('/user/email', parking.getUserByEmail);
 
 router.post('/parking', parking.getParkingById);
 router.post('/parking/request', parking.requestParking);
@@ -43,7 +44,7 @@ router.post('/parking/cancle', parking.cancleParking);
 router.post('/parking/done', parking.doneParking);
 
 router.post('/parking/user', parking.getValidRequestForUser);
-router.post('/parking/user/email', parking.getUserByEmail);
+
 
 
 app.get('/', function(request, response) {});
