@@ -38,12 +38,14 @@ exports.getUser = function(req, res) {
 };
 
 exports.getUserByEmail = function(req, res) {
-    ParkingUser.findOne({
-        '_id': req.body.email,
-        'password' : req.body.password
-    }, function(err, user) {
-        if (err)
-            return res.send(err);
-        res.json(user);
-    });
+    ParkingUser
+        .findOne({
+            '_id': req.body.email,
+            'password': req.body.password
+        })
+        .exec(function(err, user) {
+            if (err)
+                res.send(err);
+            res.json(user);
+        });
 };
