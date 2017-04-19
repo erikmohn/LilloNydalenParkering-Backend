@@ -38,6 +38,7 @@ exports.getUser = function(req, res) {
 };
 
 exports.getUserByEmail = function(req, res) {
+    console.log("Fetch user" + req.body.email );
     ParkingUser
         .findOne({
             'epost': req.body.email
