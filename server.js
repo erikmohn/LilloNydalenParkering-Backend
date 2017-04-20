@@ -17,7 +17,6 @@ var parking = require('./routes/parking');
 var users = require('./routes/users');
 
 console.log("Connecting to MongoDB: " + config.mongodb.url);
-
 mongoose.connect(config.mongodb.url);
 
 app.use(bodyParser.urlencoded({
@@ -30,7 +29,8 @@ var router = express.Router();
 
 router.post('/user/save', users.saveUser);
 router.get('/user/:userId', users.getUser);
-router.post('/user/email', users.getUserByEmail);
+router.post('/user/authenticate', users.authenticateUser);
+router.post('/user/password/change', users.changePassword);
 
 router.post('/parking', parking.getParkingById);
 router.post('/parking/request', parking.requestParking);

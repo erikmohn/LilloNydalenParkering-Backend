@@ -37,7 +37,7 @@ exports.getUser = function(req, res) {
     });
 };
 
-exports.getUserByEmail = function(req, res) {
+exports.authenticateUser = function(req, res) {
     ParkingUser
         .findOne({
             'epost': req.body.username.toLowerCase(),
@@ -47,6 +47,40 @@ exports.getUserByEmail = function(req, res) {
             if (err)
                 res.send(err);
             if (user) {
+                res.json(user);
+            } else {
+                res.json({
+                    notAuthenticated: true
+                })
+            }
+
+        });
+};
+
+
+
+exports.changePassword = function(req, res) {
+    ParkingUser
+        .findOne({
+            '_id': req.body.userId,
+            'password': req.body.password
+        })
+        .exec(function(err, user) {
+            if (err)
+                res.send(err);
+            if (user) {
+
+                user.password = req.body.newPassword
+                user.save(function(err) {
+                    if (err)
+                        res.send(err);
+                    res.json({
+                        message: 'Parking user saved! ' + user.id,
+                        user: user
+                    });
+                })
+
+
                 res.json(user);
             } else {
                 res.json({
