@@ -12,7 +12,7 @@ exports.saveUser = function(req, res) {
         user.phoneNumber = req.body.phoneNumber;
         user.parkingSpace = req.body.parkingSpace;
         user.regnr = req.body.regnr;
-        user.epost = req.body.epost;
+        user.epost = req.body.epost.toLowerCase();
         user.activated = true;
         user.pushToken = req.body.pushToken;
 
@@ -40,7 +40,7 @@ exports.getUser = function(req, res) {
 exports.getUserByEmail = function(req, res) {
     ParkingUser
         .findOne({
-            'epost': req.body.username,
+            'epost': req.body.username.toLowerCase(),
             'password': req.body.password
         })
         .exec(function(err, user) {
