@@ -46,11 +46,13 @@ exports.getUserByEmail = function(req, res) {
         .exec(function(err, user) {
             if (err)
                 res.send(err);
-            if(user) {
-                res.json(user);    
+            if (user) {
+                res.json(user);
             } else {
-                res.json({paaloggingMisslykket: true})
+                res.json({
+                    notAuthenticated: true
+                })
             }
-            
+
         });
 };
