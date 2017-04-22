@@ -11,9 +11,7 @@ exports.saveUser = function(req, res) {
                 if (err) {
                     res.send(err);
                 }
-
-
-                if (userWithEmail._id === user._id && user.email === req.body.epost) {
+                if (userWithEmail._id === user._id) {
                     user.firstName = req.body.firstName;
                     user.lastName = req.body.lastName;
                     user.phoneNumber = req.body.phoneNumber;
