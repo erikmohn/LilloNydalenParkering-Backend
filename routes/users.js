@@ -6,6 +6,7 @@ exports.saveUser = function(req, res) {
     }, function(err, user) {
         if (user) {
             ParkingUser.findOne({
+                '_id': user._id,
                 'epost': req.body.epost.toLowerCase()
             }, function(err, userWithEmail) {
                 if (err) {
@@ -13,7 +14,7 @@ exports.saveUser = function(req, res) {
                 }
                 console.log(userWithEmail._id);
                 console.log(user._id);
-                if (userWithEmail._id == user._id) {
+                if (userWithEmail) {
                     user.firstName = req.body.firstName;
                     user.lastName = req.body.lastName;
                     user.phoneNumber = req.body.phoneNumber;
