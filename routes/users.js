@@ -12,8 +12,6 @@ exports.saveUser = function(req, res) {
                 if (err) {
                     res.send(err);
                 }
-                console.log(userWithEmail._id);
-                console.log(user._id);
                 if (userWithEmail) {
                     user.firstName = req.body.firstName;
                     user.lastName = req.body.lastName;
