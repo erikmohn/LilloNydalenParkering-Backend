@@ -4,22 +4,26 @@ exports.saveUser = function(req, res) {
     ParkingUser.findOne({
         '_id': req.body.userId
     }, function(err, user) {
-        if (!user) {
-            user = new ParkingUser();
-        }
-        user.firstName = req.body.firstName;
-        user.lastName = req.body.lastName;
-        user.phoneNumber = req.body.phoneNumber;
-        user.epost = req.body.epost.toLowerCase();
+        if (user) {
+            console.log(req.body);
+            user.firstName = req.body.firstName;
+            user.lastName = req.body.lastName;
+            user.phoneNumber = req.body.phoneNumber;
+            user.epost = req.body.epost.toLowerCase();
 
-        user.save(function(err) {
-            if (err)
-                res.send(err);
+            user.save(function(err) {
+                if (err)
+                    res.send(err);
+                res.json({
+                    message: 'User saved!',
+                    user: user
+                });
+            })
+        } else {
             res.json({
-                message: 'Parking user saved! ' + user.id,
-                user: user
-            });
-        })
+                    message: 'Bruker ikke funnet!'
+                });
+        }
     });
 };
 
