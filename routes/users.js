@@ -27,7 +27,7 @@ exports.saveUser = function(req, res) {
     });
 };
 
-exports.resetPassword = new function(req, res) {
+exports.resetPassword = function(req, res) {
     ParkingUser.findOne({
         'epost': req.body.epost
     }, function(err, user) {
