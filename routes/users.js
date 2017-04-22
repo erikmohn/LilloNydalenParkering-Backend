@@ -7,14 +7,10 @@ exports.saveUser = function(req, res) {
         if (!user) {
             user = new ParkingUser();
         }
-        user.userName = req.body.userName;
-        user.password = req.body.password;
+        user.firstName = req.body.userName;
+        user.lastName = req.body.lastName;
         user.phoneNumber = req.body.phoneNumber;
-        user.parkingSpace = req.body.parkingSpace;
-        user.regnr = req.body.regnr;
         user.epost = req.body.epost.toLowerCase();
-        user.activated = true;
-        user.pushToken = req.body.pushToken;
 
         user.save(function(err) {
             if (err)
