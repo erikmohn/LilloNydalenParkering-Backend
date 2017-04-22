@@ -7,7 +7,7 @@ exports.saveUser = function(req, res) {
         if (!user) {
             user = new ParkingUser();
         }
-        user.firstName = req.body.userName;
+        user.firstName = req.body.firstName;
         user.lastName = req.body.lastName;
         user.phoneNumber = req.body.phoneNumber;
         user.epost = req.body.epost.toLowerCase();
