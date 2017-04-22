@@ -5,24 +5,41 @@ exports.saveUser = function(req, res) {
         '_id': req.body.userId
     }, function(err, user) {
         if (user) {
-            console.log(req.body);
-            user.firstName = req.body.firstName;
-            user.lastName = req.body.lastName;
-            user.phoneNumber = req.body.phoneNumber;
-            user.epost = req.body.epost.toLowerCase();
-
-            user.save(function(err) {
-                if (err)
+            ParkingUser.findOne({
+                'epost': req.body.epost
+            }, function(err, userWithEmail) {
+                if (err) {
                     res.send(err);
-                res.json({
-                    message: 'User saved!',
-                    user: user
-                });
-            })
+                }
+                user.firstName = req.body.firstName;
+                user.lastName = req.body.lastName;
+                user.phoneNumber = req.body.phoneNumber;
+
+                if (user.epost === req.body.epost.toLowerCase()) {
+                    user.epost = req.body.epost.toLowerCase()
+                } else {
+                    if (userWithEmail._id === user._id) {
+                        user.save(function(err) {
+                            if (err)
+                                res.send(err);
+                            res.json({
+                                message: 'User saved!',
+                                user: user
+                            });
+                        })
+                    } else {
+                        res.json({
+                                message: 'User saved!',
+                                userAlreadyExists: true
+                            });
+                    }
+
+                }
+            });
         } else {
             res.json({
-                    message: 'Bruker ikke funnet!'
-                });
+                message: 'Bruker ikke funnet!'
+            });
         }
     });
 };
