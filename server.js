@@ -33,6 +33,7 @@ router.get('/user/:userId', users.getUser);
 router.post('/user/email', users.getUserByEmail)
 router.post('/user/authenticate', users.authenticateUser);
 router.post('/user/password/change', users.changePassword);
+router.post('/user/password/reset', users.resetPassword);
 
 router.post('/parking', parking.getParkingById);
 router.post('/parking/request', parking.requestParking);

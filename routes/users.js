@@ -27,6 +27,27 @@ exports.saveUser = function(req, res) {
     });
 };
 
+exports.resetPassword = new function(req, res) {
+    ParkingUser.findOne({
+        'epost': req.body.epost
+    }, function(err, user) {
+        if (err) {
+            res.send(err);
+        }
+        if (user) {
+            res.send({
+                newPassword: Math.random().toString(36).slice(-8),
+                passwordReset: true
+
+            });
+        } else {
+            res.send({
+                passwordReset: false
+            });
+        }
+    });
+}
+
 exports.getUserByEmail = function(req, res) {
     ParkingUser.findOne({
         'epost': req.body.epost
