@@ -28,7 +28,9 @@ app.use(morgan('combined'))
 var router = express.Router();
 
 router.post('/user/save', users.saveUser);
+router.post('/user/new', users.newUser);
 router.get('/user/:userId', users.getUser);
+router.post('/user/email', users.getUserByEmail)
 router.post('/user/authenticate', users.authenticateUser);
 router.post('/user/password/change', users.changePassword);
 

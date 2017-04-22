@@ -212,20 +212,21 @@ exports.cancleParking = function(req, res) {
 					}
 					pusher.trigger("global-request-channel", 'request-update', {});
 
-					pusher.trigger("USER-" + parking.offerParkingUser[0]._id, 'parking-offer', {
-						"message": "Update current requests",
-						"parkingCanceled": true,
-						"msg": parking.requestUser[0].userName + " har avbrutt bruken av din parkeringsplass"
-					});
-
-					var pushToken = parking.offerParkingUser[0].pushToken;
-					if (ENABLE_PUSH && pushToken) {
-						var client = new Pushwoosh(PUSH_APP_CODE, PUSH_AUTH_CODE);
-						client.sendMessage('Din utlånte parkering er avbrutt', pushToken, function(error, response) {
-							if (error) {
-								console.log('Some error occurs: ', error);
-							}
+					if (parking.offerParkingUser[0]) {
+						pusher.trigger("USER-" + parking.offerParkingUser[0]._id, 'parking-offer', {
+							"message": "Update current requests",
+							"parkingCanceled": true,
+							"msg": parking.requestUser[0].userName + " har avbrutt bruken av din parkeringsplass"
 						});
+						var pushToken = parking.offerParkingUser[0].pushToken;
+						if (ENABLE_PUSH && pushToken) {
+							var client = new Pushwoosh(PUSH_APP_CODE, PUSH_AUTH_CODE);
+							client.sendMessage('Din utlånte parkering er avbrutt', pushToken, function(error, response) {
+								if (error) {
+									console.log('Some error occurs: ', error);
+								}
+							});
+						}
 					}
 					res.send(updatedParking);
 				});
