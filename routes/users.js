@@ -6,7 +6,7 @@ exports.saveUser = function(req, res) {
     }, function(err, user) {
         if (user) {
             ParkingUser.findOne({
-                'epost': req.body.epost
+                'epost': req.body.epost.toLowerCase()
             }, function(err, userWithEmail) {
                 if (err) {
                     res.send(err);
@@ -15,26 +15,23 @@ exports.saveUser = function(req, res) {
                 user.lastName = req.body.lastName;
                 user.phoneNumber = req.body.phoneNumber;
 
-                if (user.epost === req.body.epost.toLowerCase()) {
-                    user.epost = req.body.epost.toLowerCase()
-                } else {
-                    if (userWithEmail._id === user._id) {
-                        user.save(function(err) {
-                            if (err)
-                                res.send(err);
-                            res.json({
-                                message: 'User saved!',
-                                user: user
-                            });
-                        })
-                    } else {
+                if (userWithEmail._id === user._id) {
+                    user.save(function(err) {
+                        if (err)
+                            res.send(err);
                         res.json({
-                                message: 'User saved!',
-                                userAlreadyExists: true
-                            });
-                    }
-
+                            message: 'User saved!',
+                            user: user
+                        });
+                    })
+                } else {
+                    res.json({
+                        message: 'Another user with same email already exists',
+                        userAlreadyExists: true
+                    });
                 }
+
+
             });
         } else {
             res.json({
