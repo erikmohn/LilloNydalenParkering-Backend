@@ -143,28 +143,26 @@ exports.changePassword = function(req, res) {
     ParkingUser
         .findOne({
             '_id': req.body.userId,
-            'password': req.body.password
+            'password': req.body.oldPassword,
         })
         .exec(function(err, user) {
             if (err)
                 res.send(err);
             if (user) {
-
                 user.password = req.body.newPassword
                 user.save(function(err) {
-                    if (err)
+                    if (err) {
                         res.send(err);
-                    res.json({
-                        message: 'Parking user saved! ' + user.id,
-                        user: user
-                    });
+                    } else {
+                        res.json({
+                            message: 'Password updated ' + user.id,
+                            passwordChanged: true
+                        });
+                    }
                 })
-
-
-                res.json(user);
             } else {
                 res.json({
-                    notAuthenticated: true
+                    passwordChanged: false
                 })
             }
 
