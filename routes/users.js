@@ -1,6 +1,6 @@
 var ParkingUser = require('../models/user');
 var ParkingSpace = require('../models/parkingspace');
-var ParkingSpace = require('../models/car');
+var Car = require('../models/car');
 
 exports.saveUser = function(req, res) {
     ParkingUser.findOne({
