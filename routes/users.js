@@ -284,7 +284,7 @@ exports.saveUserParkingSpaces = function(req, res) {
         });
 }
 
-function finalizeParkingSpaceSave(parkingSpacesToAdd, user) {
+function finalizeParkingSpaceSave(user) {
     user.save(function(err) {
         if (err) {
             return res.send(err);
