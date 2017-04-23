@@ -189,6 +189,10 @@ exports.getUserParkingSpaces = function(req, res) {
     ParkingUser.findOne({
             '_id': req.params.userId
         })
+        .populate({
+            path: 'parkingSpaces',
+            model: 'ParkingSpace'
+        })
         //.populate('parkingSpaces')
         .exec(function(err, user) {
             if (err)
@@ -201,7 +205,10 @@ exports.saveUserParkingSpaces = function(req, res) {
     ParkingUser.findOne({
             '_id': req.body.userId
         })
-        .populate('parkingSpaces')
+        .populate({
+            path: 'parkingSpaces',
+            model: 'ParkingSpace'
+        })
         .exec(function(err, user) {
             if (err)
                 return res.send(err);
