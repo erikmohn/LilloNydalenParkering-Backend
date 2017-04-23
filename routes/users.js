@@ -229,14 +229,16 @@ exports.saveUserParkingSpaces = function(req, res) {
 
             user.parkingSpaces.forEach(function(oldParkingSpace, index) {
                 var shouldDeleteItem = true;
-                req.body.parkingSpaces.forEach(function(newParkingSpace) {
-                    if (newParkingSpace.parkingSpace == oldParkingSpace.parkingSpace) {
-                        shouldDeleteItem = false;
-                    }
-                    if (shouldDeleteItem) {
-                        shouldRemove.push(index);
-                    }
-                })
+                if (req.body.parkingSpaces) {
+                    req.body.parkingSpaces.forEach(function(newParkingSpace) {
+                        if (newParkingSpace.parkingSpace == oldParkingSpace.parkingSpace) {
+                            shouldDeleteItem = false;
+                        }
+                        if (shouldDeleteItem) {
+                            shouldRemove.push(index);
+                        }
+                    })
+                }
             });
             console.log("Should add:");
             console.log(shouldAdd);
