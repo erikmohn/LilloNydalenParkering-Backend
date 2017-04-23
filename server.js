@@ -11,9 +11,9 @@ var mongoose = require('mongoose');
 //Data models
 var ParkingUser = require('./models/user');
 var ParkingRequest = require('./models/parkingrequest');
-var ParkingRequest = require('./models/car');
-var ParkingRequest = require('./models/parkingspace');
-var ParkingRequest = require('./models/notificationtoken');
+var Car = require('./models/car');
+var ParkingSpace = require('./models/parkingspace');
+var NotificationToken = require('./models/notificationtoken');
 
 //Routes
 var parking = require('./routes/parking');
