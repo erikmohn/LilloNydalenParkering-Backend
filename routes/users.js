@@ -209,23 +209,23 @@ exports.saveUserParkingSpaces = function(req, res) {
             var shouldRemove = [];
 
             req.body.parkingSpaces.forEach(function(newParkingSpace, index) {
-                var shouldAdd = true;
+                var shouldAddItem = true;
                 user.parkingSpaces.forEach(function(oldParkingSpace) {
                     if (newParkingSpace.parkingSpace == oldParkingSpace.parkingSpace) {
-                        shouldAdd = false;
+                        shouldAddItem = false;
                     }
                 })
-                if (shouldAdd) {
+                if (shouldAddItem) {
                     shouldAdd.push(index);
                 }
             });
             user.parkingSpaces.forEach(function(oldParkingSpace, index) {
-                var shouldDelete = true;
+                var shouldDeleteItem = true;
                 req.body.parkingSpaces.forEach(function(newParkingSpace) {
                     if (newParkingSpace.parkingSpace == oldParkingSpace.parkingSpace) {
-                        shouldDelete = false;
+                        shouldDeleteItem = false;
                     }
-                    if (shouldDelete) {
+                    if (shouldDeleteItem) {
                         shouldRemove.push(index);
                     }
                 })
