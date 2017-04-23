@@ -1,4 +1,5 @@
 var ParkingUser = require('../models/user');
+var ParkingSpace = require('../models/parkingspace');
 
 exports.saveUser = function(req, res) {
     ParkingUser.findOne({
@@ -204,10 +205,35 @@ exports.saveUserParkingSpaces = function(req, res) {
         .exec(function(err, user) {
             if (err)
                 return res.send(err);
+            var shouldAdd = [];
+            var shouldRemove = [];
 
-            req.body.parkingSpaces.forEach(function(entry) {
-                console.log(entry);
+            req.body.parkingSpaces.forEach(function(newParkingSpace, index) {
+                var found = false;
+                user.parkingSpaces.forEach(function(oldParkingSpace) {
+                    if (newParkingSpace.parkingSpace == oldParkingSpace.parkingSpace) {
+                        found = true;
+                    }
+                })
+                if (!found) {
+                    shouldAdd.push(index);
+                }
             });
+            user.parkingSpaces.forEach(function(oldParkingSpace, index) {
+                req.body.parkingSpaces.forEach(function(newParkingSpace) {
+                    var found = false;
+                    if (newParkingSpace.parkingSpace == oldParkingSpace.parkingSpace) {
+                        found = true;
+                    }
+                    if (!found) {
+                        shouldRemove.push(index);
+                    }
+                })
+            });
+            console.log("Should add:");
+            console.log(shouldAdd);
+            console.log("Should remove:");
+            console.log(shouldRemove);
 
             res.json(user.parkingSpaces);
         });
