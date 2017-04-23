@@ -240,10 +240,6 @@ exports.saveUserParkingSpaces = function(req, res) {
                     shouldRemove.push(index);
                 }
             });
-            console.log("Should add:");
-            console.log(shouldAdd);
-            console.log("Should remove:");
-            console.log(shouldRemove);
 
             var itemsToSave = [];
             shouldAdd.forEach(function(index) {
@@ -267,10 +263,6 @@ exports.saveUserParkingSpaces = function(req, res) {
             }
 
             //Actually save and delete stuff now!
-            console.log("Should save:");
-            console.log(itemsToSave);
-            console.log("Should delete:");
-            console.log(itemsToDelete);
             itemsToSave.forEach(function(item) {
                 item.save(function(err) {
                     if (err)
