@@ -382,7 +382,7 @@ exports.saveUserCars = function(req, res) {
             var i = 0;
 
             if (num == 0) {
-                finalizeCarSave(user, res, itemsToDelete, itemsToSave);
+                finalizeCarsSave(user, res, itemsToDelete, itemsToSave);
             }
 
             //Actually save and delete stuff now!
