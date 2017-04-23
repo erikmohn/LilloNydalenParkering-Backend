@@ -1,5 +1,6 @@
 var ParkingUser = require('../models/user');
 var ParkingSpace = require('../models/parkingspace');
+var ParkingSpace = require('../models/car');
 
 exports.saveUser = function(req, res) {
     ParkingUser.findOne({
@@ -295,6 +296,128 @@ exports.saveUserParkingSpaces = function(req, res) {
 }
 
 function finalizeParkingSpaceSave(user, res, itemsToDelete, itemsToSave) {
+    user.save(function(err) {
+        if (err) {
+            return res.send(err);
+        }
+        res.json({
+            message: "Done, removed: " + itemsToDelete.length + ", and added: " + itemsToSave.length + " new items",
+            saved: true
+        });
+    })
+}
+
+
+exports.getUserCars = function(req, res) {
+    ParkingUser.findOne({
+            '_id': req.params.userId
+        })
+        .populate({
+            path: 'cars',
+            model: 'Car'
+        })
+        .exec(function(err, user) {
+            if (err)
+                return res.send(err);
+            res.json(user.cars);
+        });
+};
+
+exports.saveUserCars = function(req, res) {
+    ParkingUser.findOne({
+            '_id': req.body.userId
+        })
+        .populate({
+            path: 'cars',
+            model: 'Car'
+        })
+        .exec(function(err, user) {
+            if (err)
+                return res.send(err);
+            var shouldAdd = [];
+            var shouldRemove = [];
+            if (req.body.cars) {
+                req.body.cars.forEach(function(newCar, index) {
+                    var shouldAddItem = true;
+                    user.cars.forEach(function(oldCar) {
+                        if (newCar.regNr == oldCar.regNr) {
+                            shouldAddItem = false;
+                        }
+                    })
+                    if (shouldAddItem) {
+                        shouldAdd.push(index);
+                    }
+                });
+            }
+
+            user.cars.forEach(function(oldCar, index) {
+                var shouldDeleteItem = true;
+                if (req.body.cars) {
+                    req.body.cars.forEach(function(newCar) {
+                        if (newCar.regNr == oldCar.regNr) {
+                            shouldDeleteItem = false;
+                        }
+                    })
+                }
+                if (shouldDeleteItem) {
+                    shouldRemove.push(index);
+                }
+            });
+
+            var itemsToSave = [];
+            shouldAdd.forEach(function(index) {
+                var item = req.body.cars[index]
+                var car = new Car();
+                car.regNr = item.regNr;
+                itemsToSave.push(car);
+            });
+
+            var itemsToDelete = [];
+            shouldRemove.forEach(function(index) {
+                var car = user.cars[index];
+                itemsToDelete.push(car);
+            });
+
+            var num = shouldRemove.length + shouldAdd.length;
+            var i = 0;
+
+            if (num == 0) {
+                finalizeCarSave(user, res, itemsToDelete, itemsToSave);
+            }
+
+            //Actually save and delete stuff now!
+            itemsToSave.forEach(function(item) {
+                item.save(function(err) {
+                    if (err)
+                        return res.send(err);
+                    user.cars.push(item);
+                    i++;
+                    if (i == num) {
+                        finalizeCarsSave(user, res, itemsToDelete, itemsToSave);
+                    }
+                })
+            });
+
+            itemsToDelete.forEach(function(item) {
+                user.cars.forEach(function(car, index) {
+                    if (car.regNr == item.regNr) {
+                        user.cars.splice(index, 1);
+                    }
+                });
+                item.remove(function(err) {
+                    if (err)
+                        return res.send(err);
+
+                    i++;
+                    if (i == num) {
+                        finalizeCarsSave(user, res, itemsToDelete, itemsToSave);
+                    }
+                });
+            });
+        });
+}
+
+function finalizeCarsSave(user, res, itemsToDelete, itemsToSave) {
     user.save(function(err) {
         if (err) {
             return res.send(err);

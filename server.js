@@ -33,6 +33,8 @@ var router = express.Router();
 router.get('/user/:userId', users.getUser);
 router.get('/user/parkingSpaces/:userId', users.getUserParkingSpaces);
 router.post('/user/parkingSpaces/save', users.saveUserParkingSpaces);
+router.get('/user/cars/:userId', users.getUserCars);
+router.post('/user/cars/save', users.saveUserCars);
 
 router.post('/user/save', users.saveUser);
 router.post('/user/new', users.newUser);
