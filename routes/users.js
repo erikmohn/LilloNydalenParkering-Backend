@@ -211,6 +211,9 @@ exports.saveUserParkingSpaces = function(req, res) {
             req.body.parkingSpaces.forEach(function(newParkingSpace, index) {
                 var shouldAddItem = true;
                 user.parkingSpaces.forEach(function(oldParkingSpace) {
+                    console.log("COMPARING");
+                    console.log(newParkingSpace.parkingSpace)
+                    console.log(oldParkingSpace.parkingSpace)
                     if (newParkingSpace.parkingSpace == oldParkingSpace.parkingSpace) {
                         shouldAddItem = false;
                     }
