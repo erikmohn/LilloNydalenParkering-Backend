@@ -95,14 +95,14 @@ exports.newUser = function(req, res) {
                 message: "User with same email already existis",
                 userAlreadyExists: true
             });
-
         } else {
+            var objectsToSave = [];
             user = new ParkingUser();
             user.firstName = req.body.firstName;
             user.lastName = req.body.lastName
             user.phoneNumber = req.body.phoneNumber
-            user.parkingSpace = req.body.parkingSpace;
-            user.regnr = req.body.regnr;
+            //user.parkingSpace = req.body.parkingSpace;
+            //user.regnr = req.body.regnr;
             user.epost = req.body.epost.toLowerCase();
             user.hasParkingspace = req.body.hasParkingspace;
             user.needsParkingspace = req.body.needsParkingspace;
@@ -110,14 +110,34 @@ exports.newUser = function(req, res) {
             user.pushToken = req.body.pushToken;
             user.password = req.body.password;
             user.activated = true;
+            objectsToSave.push(user);
 
-            user.save(function(err) {
-                if (err)
-                    res.send(err);
-                res.json({
-                    message: 'User saved! ' + user.id,
-                    user: user
-                });
+            if (req.body.parkingSpace.length != 0) {
+                var parkingSpace = new ParkingSpace();
+                parkingSpace.parkingSpace = req.body.parkingSpace;
+                user.parkingSpaces.push(parkingSpace);
+                objectsToSave.push(parkingSpace);
+            }
+            if (req.body.regnr.length !== 0) {
+                var car = new Car();
+                car.regNr = req.body.regnr;
+                user.cars.push(car);
+                objectsToSave.push(car);
+
+            }
+            var num = 0;
+            objectsToSave.forEach(function(item, index) {
+                item.save(function(err) {
+                    if (err)
+                        res.send(err);
+                    num++;
+                    if (num == objectsToSave.length) {
+                        res.json({
+                        message: 'User saved! ' + user.id,
+                        user: user
+                    });
+                    }
+                })
             })
         }
 
