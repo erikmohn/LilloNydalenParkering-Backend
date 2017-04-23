@@ -266,7 +266,7 @@ exports.saveUserParkingSpaces = function(req, res) {
                     user.parkingSpaces.push(item);
                     i++;
                     if (i == num) {
-                        finalizeParkingSpaceSave(user, res itemsToDelete, itemsToSave);
+                        finalizeParkingSpaceSave(user, res, itemsToDelete, itemsToSave);
                     }
                 })
             });
@@ -284,7 +284,7 @@ exports.saveUserParkingSpaces = function(req, res) {
         });
 }
 
-function finalizeParkingSpaceSave(user, res) {
+function finalizeParkingSpaceSave(user, res, itemsToDelete,itemsToSave) {
     user.save(function(err) {
         if (err) {
             return res.send(err);
