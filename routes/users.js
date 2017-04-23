@@ -280,9 +280,15 @@ exports.saveUserParkingSpaces = function(req, res) {
             });
 
             itemsToDelete.forEach(function(item) {
+                user.parkingSpaces.forEach(function(parking, index) {
+                    if(parking.parkingSpace == item.parkingSpace) {
+                        user.parkingSpaces.splice(index,1);
+                    }
+                });
                 item.remove(function(err) {
                     if (err)
                         return res.send(err);
+
                     i++;
                     if (i == num) {
                         finalizeParkingSpaceSave(user, res, itemsToDelete, itemsToSave);
