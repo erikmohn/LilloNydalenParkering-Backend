@@ -216,12 +216,7 @@ exports.saveUserParkingSpaces = function(req, res) {
 
             req.body.parkingSpaces.forEach(function(newParkingSpace, index) {
                 var shouldAddItem = true;
-                console.log("Will try to find what elements to add!");
-                console.log(user.parkingSpaces);
                 user.parkingSpaces.forEach(function(oldParkingSpace) {
-                    console.log("COMPARING");
-                    console.log(newParkingSpace.parkingSpace)
-                    console.log(oldParkingSpace.parkingSpace)
                     if (newParkingSpace.parkingSpace == oldParkingSpace.parkingSpace) {
                         shouldAddItem = false;
                     }
@@ -262,6 +257,11 @@ exports.saveUserParkingSpaces = function(req, res) {
 
             var num = shouldRemove.length + shouldAdd.length;
             var i = 0;
+
+            if(num=i) {
+                finalizeParkingSpaceSave(user, res, itemsToDelete, itemsToSave);
+            }
+
             //Actually save and delete stuff now!
             console.log("Should save:");
             console.log(itemsToSave);
