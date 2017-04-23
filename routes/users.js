@@ -203,6 +203,7 @@ exports.saveUserParkingSpaces = function(req, res) {
         })
         .populate('parkingSpaces')
         .exec(function(err, user) {
+            console.log("USER: " + user)
             if (err)
                 return res.send(err);
             var shouldAdd = [];
