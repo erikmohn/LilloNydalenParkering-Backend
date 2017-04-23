@@ -234,10 +234,10 @@ exports.saveUserParkingSpaces = function(req, res) {
                         if (newParkingSpace.parkingSpace == oldParkingSpace.parkingSpace) {
                             shouldDeleteItem = false;
                         }
-                        if (shouldDeleteItem) {
-                            shouldRemove.push(index);
-                        }
                     })
+                }
+                if (shouldDeleteItem) {
+                    shouldRemove.push(index);
                 }
             });
             console.log("Should add:");
