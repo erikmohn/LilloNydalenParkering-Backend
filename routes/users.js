@@ -258,7 +258,7 @@ exports.saveUserParkingSpaces = function(req, res) {
             var num = shouldRemove.length + shouldAdd.length;
             var i = 0;
 
-            if(num=i) {
+            if(num == 0) {
                 finalizeParkingSpaceSave(user, res, itemsToDelete, itemsToSave);
             }
 
