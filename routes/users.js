@@ -213,18 +213,20 @@ exports.saveUserParkingSpaces = function(req, res) {
                 return res.send(err);
             var shouldAdd = [];
             var shouldRemove = [];
-
-            req.body.parkingSpaces.forEach(function(newParkingSpace, index) {
-                var shouldAddItem = true;
-                user.parkingSpaces.forEach(function(oldParkingSpace) {
-                    if (newParkingSpace.parkingSpace == oldParkingSpace.parkingSpace) {
-                        shouldAddItem = false;
+            if (req.body.parkingSpaces) {
+                req.body.parkingSpaces.forEach(function(newParkingSpace, index) {
+                    var shouldAddItem = true;
+                    user.parkingSpaces.forEach(function(oldParkingSpace) {
+                        if (newParkingSpace.parkingSpace == oldParkingSpace.parkingSpace) {
+                            shouldAddItem = false;
+                        }
+                    })
+                    if (shouldAddItem) {
+                        shouldAdd.push(index);
                     }
-                })
-                if (shouldAddItem) {
-                    shouldAdd.push(index);
-                }
-            });
+                });
+            }
+
             user.parkingSpaces.forEach(function(oldParkingSpace, index) {
                 var shouldDeleteItem = true;
                 req.body.parkingSpaces.forEach(function(newParkingSpace) {
@@ -258,7 +260,7 @@ exports.saveUserParkingSpaces = function(req, res) {
             var num = shouldRemove.length + shouldAdd.length;
             var i = 0;
 
-            if(num == 0) {
+            if (num == 0) {
                 finalizeParkingSpaceSave(user, res, itemsToDelete, itemsToSave);
             }
 
@@ -281,8 +283,8 @@ exports.saveUserParkingSpaces = function(req, res) {
 
             itemsToDelete.forEach(function(item) {
                 user.parkingSpaces.forEach(function(parking, index) {
-                    if(parking.parkingSpace == item.parkingSpace) {
-                        user.parkingSpaces.splice(index,1);
+                    if (parking.parkingSpace == item.parkingSpace) {
+                        user.parkingSpaces.splice(index, 1);
                     }
                 });
                 item.remove(function(err) {
