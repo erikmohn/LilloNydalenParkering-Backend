@@ -212,7 +212,7 @@ exports.saveUserParkingSpaces = function(req, res) {
             req.body.parkingSpaces.forEach(function(newParkingSpace, index) {
                 var found = false;
                 user.parkingSpaces.forEach(function(oldParkingSpace) {
-                    if (newParkingSpace.parkingSpace == oldParkingSpace.parkingSpace) {
+                    if (newParkingSpace.parkingSpace === oldParkingSpace.parkingSpace) {
                         found = true;
                     }
                 })
@@ -223,7 +223,7 @@ exports.saveUserParkingSpaces = function(req, res) {
             user.parkingSpaces.forEach(function(oldParkingSpace, index) {
                 req.body.parkingSpaces.forEach(function(newParkingSpace) {
                     var found = false;
-                    if (newParkingSpace.parkingSpace == oldParkingSpace.parkingSpace) {
+                    if (newParkingSpace.parkingSpace === oldParkingSpace.parkingSpace) {
                         found = true;
                     }
                     if (!found) {
