@@ -203,33 +203,29 @@ exports.saveUserParkingSpaces = function(req, res) {
         })
         .populate('parkingSpaces')
         .exec(function(err, user) {
-            console.log("USER: " + user)
             if (err)
                 return res.send(err);
             var shouldAdd = [];
             var shouldRemove = [];
 
             req.body.parkingSpaces.forEach(function(newParkingSpace, index) {
-                var found = false;
+                var shouldAdd = true;
                 user.parkingSpaces.forEach(function(oldParkingSpace) {
-                    console.log("COMPARING THIS!");
-                    console.log(newParkingSpace.parkingSpace);
-                    console.log(oldParkingSpace.parkingSpace);
-                    if (newParkingSpace.parkingSpace === oldParkingSpace.parkingSpace) {
-                        found = true;
+                    if (newParkingSpace.parkingSpace == oldParkingSpace.parkingSpace) {
+                        shouldAdd = false;
                     }
                 })
-                if (!found) {
+                if (shouldAdd) {
                     shouldAdd.push(index);
                 }
             });
             user.parkingSpaces.forEach(function(oldParkingSpace, index) {
+                var shouldDelete = true;
                 req.body.parkingSpaces.forEach(function(newParkingSpace) {
-                    var found = false;
-                    if (newParkingSpace.parkingSpace === oldParkingSpace.parkingSpace) {
-                        found = true;
+                    if (newParkingSpace.parkingSpace == oldParkingSpace.parkingSpace) {
+                        shouldDelete = false;
                     }
-                    if (!found) {
+                    if (shouldDelete) {
                         shouldRemove.push(index);
                     }
                 })
@@ -255,9 +251,7 @@ exports.saveUserParkingSpaces = function(req, res) {
 
             var num = shouldRemove.length + shouldAdd.length;
             var i = 0;
-
             //Actually save and delete stuff now!
-
             console.log("Should save:");
             console.log(itemsToSave);
             console.log("Should delete:");
@@ -280,14 +274,14 @@ exports.saveUserParkingSpaces = function(req, res) {
                         return res.send(err);
                     i++;
                     if (i == num) {
-                        finalizeParkingSpaceSave(user, res, itemsToDelete,itemsToSave);
+                        finalizeParkingSpaceSave(user, res, itemsToDelete, itemsToSave);
                     }
                 });
             });
         });
 }
 
-function finalizeParkingSpaceSave(user, res, itemsToDelete,itemsToSave) {
+function finalizeParkingSpaceSave(user, res, itemsToDelete, itemsToSave) {
     user.save(function(err) {
         if (err) {
             return res.send(err);
