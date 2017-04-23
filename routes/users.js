@@ -189,7 +189,7 @@ exports.getUserParkingSpaces = function(req, res) {
     ParkingUser.findOne({
             '_id': req.params.userId
         })
-        .populate('parkingSpaces')
+        //.populate('parkingSpaces')
         .exec(function(err, user) {
             if (err)
                 return res.send(err);
