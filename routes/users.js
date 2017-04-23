@@ -235,6 +235,25 @@ exports.saveUserParkingSpaces = function(req, res) {
             console.log("Should remove:");
             console.log(shouldRemove);
 
+            var itemsToSave = [];
+            shouldAdd.forEach(function(index) {
+                var item = req.body.parkingSpaces[index]
+                var parkingSpace = new ParkingSpace();
+                parkingSpace.parkingSpace = item.parkingSpace;
+                itemsToSave.push(parkingSpace);
+            });
+
+            var itemsToDelete = [];
+            shouldRemove.forEach(function(index) {
+                var parkingSpace = user.parkingSpaces[index];
+                itemsToDelte.push(parkingSpace);
+            });
+
+            console.log("Should save:");
+            console.log(itemsToSave);
+            console.log("Should delete:");
+            console.log(itemsToDelete);
+
             res.json(user.parkingSpaces);
         });
 
