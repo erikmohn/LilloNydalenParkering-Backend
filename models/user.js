@@ -13,7 +13,15 @@ var UserSchema = new Schema({
 	wantsPush: Boolean,
 	pushToken: String,
 	password: String,
-	activated: Boolean
+	activated: Boolean,
+	cars: [{
+        type: Schema.Types.ObjectId,
+        ref: 'ParkingSpace'
+    }],
+    parkingSpaces: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Car'
+    }]
 });
 
 module.exports = mongoose.model('ParkingUser', UserSchema);

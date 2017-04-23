@@ -20,7 +20,11 @@ var ParkeringRequestSchema = new Schema({
     registredDate: Date,
     registred: Date,
     answeredDate: Date,
-    done: Boolean
+    done: Boolean,
+    parkingSpace: [{
+        type: Schema.Types.ObjectId,
+        ref: 'ParkingSpace'
+    }]
 });
 
 module.exports = mongoose.model('ParkingRequest', ParkeringRequestSchema);

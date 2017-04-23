@@ -183,3 +183,34 @@ exports.changePassword = function(req, res) {
 
         });
 };
+
+exports.getUserParkingSpaces = function(req, res) {
+    ParkingUser.findOne({
+            '_id': req.params.userId
+        })
+        .populate('parkingSpaces')
+        .exec(function(err, user) {
+            if (err)
+                return res.send(err);
+            res.json(user.parkingSpaces);
+        });
+};
+
+exports.saveUserParkingSpaces = function(req, res) {
+    ParkingUser.findOne({
+            '_id': req.body.userId
+        })
+        .populate('parkingSpaces')
+        .exec(function(err, user) {
+            if (err)
+                return res.send(err);
+
+            req.body.parkingSpaces.forEach(function(entry) {
+                console.log(entry);
+            });
+
+            res.json(user.parkingSpaces);
+        });
+
+
+}

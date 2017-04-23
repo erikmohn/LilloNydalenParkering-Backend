@@ -11,6 +11,9 @@ var mongoose = require('mongoose');
 //Data models
 var ParkingUser = require('./models/user');
 var ParkingRequest = require('./models/parkingrequest');
+var ParkingRequest = require('./models/car');
+var ParkingRequest = require('./models/parkingspace');
+var ParkingRequest = require('./models/notificationtoken');
 
 //Routes
 var parking = require('./routes/parking');
@@ -27,10 +30,14 @@ app.use(morgan('combined'))
 
 var router = express.Router();
 
+router.get('/user/:userId', users.getUser);
+router.get('/user/parkingSpaces/:userId', users.getUserParkingSpaces);
+router.post('/user/parkingSpaces/save', users.saveUserParkingSpaces);
+
 router.post('/user/save', users.saveUser);
 router.post('/user/new', users.newUser);
-router.get('/user/:userId', users.getUser);
 router.post('/user/email', users.getUserByEmail)
+
 router.post('/user/authenticate', users.authenticateUser);
 router.post('/user/password/change', users.changePassword);
 router.post('/user/password/reset', users.resetPassword);
