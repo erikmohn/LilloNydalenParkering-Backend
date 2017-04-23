@@ -25,6 +25,8 @@ var ParkeringRequestSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'ParkingSpace'
     }]
+    requestMessage:String,
+    responseMessage:String
 });
 
 module.exports = mongoose.model('ParkingRequest', ParkeringRequestSchema);

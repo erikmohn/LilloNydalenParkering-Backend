@@ -12,7 +12,7 @@ var pusher = new Pusher({
 	encrypted: true
 });
 
-var ENABLE_PUSH = true;
+var ENABLE_PUSH = false;
 
 var PUSH_APP_CODE = "2D52E-A279A";
 var PUSH_AUTH_CODE = "10kqID2h62E4Gn4Ax38TifJKxUmZtbtgbUlrQQRDWhVhNH27JqMymGtRXNv1xCbWAOKzlEJa7XZPiS6yB0Bc";
@@ -34,7 +34,8 @@ exports.requestParking = function(req, res) {
 			parking.answered = false;
 			parking.canceled = false;
 			parking.done = false;
-			parking.registredDate = req.body.registredDate
+			parking.registredDate = req.body.registredDate;
+			parking.requestMessage = req.body.requestMessage;
 			parking.save(function(err) {
 				if (err) {
 					res.send(err);
