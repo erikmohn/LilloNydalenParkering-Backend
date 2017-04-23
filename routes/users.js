@@ -193,7 +193,6 @@ exports.getUserParkingSpaces = function(req, res) {
             path: 'parkingSpaces',
             model: 'ParkingSpace'
         })
-        //.populate('parkingSpaces')
         .exec(function(err, user) {
             if (err)
                 return res.send(err);
@@ -258,7 +257,7 @@ exports.saveUserParkingSpaces = function(req, res) {
             var itemsToDelete = [];
             shouldRemove.forEach(function(index) {
                 var parkingSpace = user.parkingSpaces[index];
-                itemsToDelte.push(parkingSpace);
+                itemsToDelete.push(parkingSpace);
             });
 
             var num = shouldRemove.length + shouldAdd.length;
