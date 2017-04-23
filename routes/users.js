@@ -249,13 +249,42 @@ exports.saveUserParkingSpaces = function(req, res) {
                 itemsToDelte.push(parkingSpace);
             });
 
+            var num = shouldRemove.length + shouldAdd.length;
+            var i = 0;
+
+            //Actually save and delete stuff now!
+            
             console.log("Should save:");
             console.log(itemsToSave);
             console.log("Should delete:");
             console.log(itemsToDelete);
+            itemsToSave.forEach(function(item) {
+                item.save(function(err) {
+                    if (err)
+                        return res.send(err);
 
-            res.json(user.parkingSpaces);
+                    i++;
+                    if (i == num) {
+                        res.json({
+                            message: "Done, removed: " + itemsToDelete.length + ", and added: " + itemsToSave.length + "new items",
+                            saved: true
+                        });
+                    }
+                })
+            });
+
+            itemsToDelete.forEach(function(item) {
+                item.remove(function(err) {
+                    if (err)
+                        return res.send(err);
+                    i++;
+                    if (i == num) {
+                        res.json({
+                            message: "Done, removed: " + itemsToDelete.length + ", and added: " + itemsToSave.length + "new items",
+                            saved: true
+                        });
+                    }
+                });
+            });
         });
-
-
 }
