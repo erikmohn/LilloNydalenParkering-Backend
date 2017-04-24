@@ -63,9 +63,11 @@ exports.resetPassword = function(req, res) {
 
             var data = {
                 from: 'Lillo nydalen parkering <post@lillonydalenparkering.no>',
-                to: 'mohn.erik@gmail.com',
+                to: req.body.epost,
                 subject: 'Lillo nydalen parkering - Nytt passord',
-                text: 'Testing some Mailgun awesomness!'
+                text: 'Du har fått nytt passord: ' + password +
+                ' Med vennelig hilsen' +
+                ' Lillo nydalen parkering'
             };
 
             mailgun.messages().send(data, function(error, body) {
