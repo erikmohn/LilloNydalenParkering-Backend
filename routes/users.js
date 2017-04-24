@@ -52,8 +52,29 @@ exports.resetPassword = function(req, res) {
             res.send(err);
         }
         if (user) {
+            var password = Math.random().toString(36).slice(-8);
+
+            var api_key = 'key-7a50e4c5c0872f4b1372ec6c0d06acc4';
+            var domain = 'www.lillonydalen.no';
+            var mailgun = require('mailgun-js')({
+                apiKey: api_key,
+                domain: domain
+            });
+
+            var data = {
+                from: 'Lillo nydalen parkering <post@lillonydalenparkering.no>',
+                to: 'mohn.erik@gmail.com',
+                subject: 'Lillo nydalen parkering - Nytt passord',
+                text: 'Testing some Mailgun awesomness!'
+            };
+
+            mailgun.messages().send(data, function(error, body) {
+                console.log(body);
+            });
+
+
             res.send({
-                newPassword: Math.random().toString(36).slice(-8),
+                newPassword: password,
                 passwordReset: true
 
             });
@@ -101,8 +122,8 @@ exports.newUser = function(req, res) {
             user.firstName = req.body.firstName;
             user.lastName = req.body.lastName
             user.phoneNumber = req.body.phoneNumber
-            //user.parkingSpace = req.body.parkingSpace;
-            //user.regnr = req.body.regnr;
+                //user.parkingSpace = req.body.parkingSpace;
+                //user.regnr = req.body.regnr;
             user.epost = req.body.epost.toLowerCase();
             user.hasParkingspace = req.body.hasParkingspace;
             user.needsParkingspace = req.body.needsParkingspace;
@@ -133,9 +154,9 @@ exports.newUser = function(req, res) {
                     num++;
                     if (num == objectsToSave.length) {
                         res.json({
-                        message: 'User saved! ' + user.id,
-                        user: user
-                    });
+                            message: 'User saved! ' + user.id,
+                            user: user
+                        });
                     }
                 })
             })
