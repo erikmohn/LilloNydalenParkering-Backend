@@ -55,7 +55,7 @@ exports.resetPassword = function(req, res) {
             var password = Math.random().toString(36).slice(-8);
 
             var api_key = 'key-7a50e4c5c0872f4b1372ec6c0d06acc4';
-            var domain = 'www.lillonydalen.no';
+            var domain = 'www.lillonydalenparkering.no';
             var mailgun = require('mailgun-js')({
                 apiKey: api_key,
                 domain: domain
