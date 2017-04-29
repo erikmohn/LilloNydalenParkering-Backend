@@ -39,10 +39,13 @@ router.post('/user/password/change', users.changePassword);
 router.post('/user/password/reset', users.resetPassword);
 
 router.get('/user/:userId', users.getUser);
+
 router.get('/user/parkingSpaces/:userId', users.getUserParkingSpaces);
 router.post('/user/parkingSpaces/save', users.saveUserParkingSpaces);
 router.get('/user/cars/:userId', users.getUserCars);
 router.post('/user/cars/save', users.saveUserCars);
+
+router.get('/messages/:threadId', messages.getMessageThread);
 
 router.post('/user/save', users.saveUser);
 router.post('/user/new', users.newUser);
