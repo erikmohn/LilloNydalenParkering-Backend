@@ -1,5 +1,6 @@
 var ParkingUser = require('../models/user');
 var ParkingRequest = require('../models/parkingrequest');
+var FreeParking = require('../models/freeparking');
 var Pusher = require('pusher');
 var Pushwoosh = require('pushwoosh-client');
 var Moment = require('moment-timezone');
@@ -73,6 +74,36 @@ exports.requestParking = function(req, res) {
 	});
 };
 
+
+exports.registerFreeParking = function(req, res) {
+	ParkingUser.findOne({
+		'_id': req.body.userId
+	}, function(err, user) {
+		if (err) {
+			res.send(err);
+		} else {
+			var parking = new FreeParking();
+			parking.owner = user;
+			parking.parkingSpace = req.body.parkingSpace;
+			parking.startTime = req.body.starTime;
+			parking.endTime = req.body.endTime;
+			parking.canceled = false;
+			parking.registredDate = req.body.registredDate;
+			parking.save(function(err) {
+				if (err) {
+					res.send(err);
+				} else {
+					res.json({
+						message: 'Ledig parkering registrert!',
+						request: parking
+					});
+				}
+			});
+		}
+	});
+
+};
+
 exports.offerParking = function(req, res) {
 	ParkingUser.findOne({
 		'_id': req.body.offerUserId
@@ -130,16 +161,44 @@ exports.offerParking = function(req, res) {
 											'ongoingParking': true
 										});
 									} else {
+
 										parking.answered = true;
 										parking.offerParkingUser = user;
 										parking.parkingLot = req.body.parkingLot;
 										parking.answeredDate = req.body.answeredDate;
-										parking.save(function(err, updatedParking) {
+
+										var freeParking = new FreeParking();
+										freeParking.owner = user;
+										freeParking.parkingSpace = req.body.parkingLot;
+										freeParking.startTime = parking.startTime;
+										freeParking.endTime = parking.endTime;
+										freeParking.canceled = false;
+										freeParking.registredDate = req.body.registredDate;
+										freeParking.parkingRequests.push(parking);
+
+										var messageThread = new MessageThread();
+
+										var requestMessage = new Message();
+										requestMessage.sender = parking.requestUser;
+										requestMessage.date = parking.registredDate;
+										requestMessage.message = parking.requestMessage;
+
+										var responseMessage = new Message();
+										requestMessage.sender = user;
+										requestMessage.date = req.body.registredDate;
+										requestMessage.message = req.body.responseMessage;
+
+										messageThread.messages.push(requestMessage);
+										messageThread.messages.push(responseMessage);
+
+										parking.messages = messageThread;
+
+										freeParking.save(function(err, updatedParking) {
 											if (err) {
 												res.send(err)
 											}
 
-											pusher.trigger("USER-" + updatedParking.requestUser[0]._id, 'parking-offer', {
+											pusher.trigger("USER-" + parking.requestUser[0]._id, 'parking-offer', {
 												"message": "Update current requests",
 												"parkingAnswered": true
 											});
@@ -155,7 +214,7 @@ exports.offerParking = function(req, res) {
 												});
 											}
 
-											res.send(updatedParking);
+											res.send(parking);
 										});
 									}
 

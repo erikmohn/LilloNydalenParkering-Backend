@@ -10,10 +10,15 @@ var mongoose = require('mongoose');
 
 //Data models
 var ParkingUser = require('./models/user');
-var ParkingRequest = require('./models/parkingrequest');
+
 var Car = require('./models/car');
 var ParkingSpace = require('./models/parkingspace');
 var NotificationToken = require('./models/notificationtoken');
+var MessageThread = require('./models/messagethread');
+var MessageThread = require('./models/messagethread');
+var Message = require('./models/message');
+var FreeParking = require('./models/freeparking');
+var ParkingRequest = require('./models/parkingrequest');
 
 //Routes
 var parking = require('./routes/parking');
@@ -30,6 +35,10 @@ app.use(morgan('combined'))
 
 var router = express.Router();
 
+router.post('/user/authenticate', users.authenticateUser);
+router.post('/user/password/change', users.changePassword);
+router.post('/user/password/reset', users.resetPassword);
+
 router.get('/user/:userId', users.getUser);
 router.get('/user/parkingSpaces/:userId', users.getUserParkingSpaces);
 router.post('/user/parkingSpaces/save', users.saveUserParkingSpaces);
@@ -40,17 +49,15 @@ router.post('/user/save', users.saveUser);
 router.post('/user/new', users.newUser);
 router.post('/user/email', users.getUserByEmail)
 
-router.post('/user/authenticate', users.authenticateUser);
-router.post('/user/password/change', users.changePassword);
-router.post('/user/password/reset', users.resetPassword);
-
 router.post('/parking', parking.getParkingById);
 router.post('/parking/request', parking.requestParking);
-
 router.post('/parking/requests', parking.getValidRequests);
 router.post('/parking/requests/past', parking.getPastRequests);
 
 router.post('/parking/offer', parking.offerParking);
+
+router.post('/parking/free', parking.registerFreeParking);
+
 
 router.post('/parking/cancle', parking.cancleParking);
 router.post('/parking/done', parking.doneParking);
