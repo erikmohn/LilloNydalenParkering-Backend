@@ -163,61 +163,58 @@ exports.offerParking = function(req, res) {
 											'ongoingParking': true
 										});
 									} else {
-										var messageThread = new MessageThread();
-
 										var requestMessage = new Message();
 										requestMessage.sender = parking.requestUser;
 										requestMessage.date = parking.registredDate;
 										requestMessage.message = parking.requestMessage;
 
-										var responseMessage = new Message();
-										requestMessage.sender = user;
-										requestMessage.date = req.body.registredDate;
-										requestMessage.message = req.body.responseMessage;
+										requestMessage.save(function(err, newMessage) {
+											var messageThread = new MessageThread();
+											messageThread.messages.push(newMessage);
+											messageThread.save(function(err, newMessageThread) {
+												parking.messages = newMessageThread;
+												parking.answered = true;
+												parking.offerParkingUser = user;
+												parking.parkingLot = req.body.parkingLot;
+												parking.answeredDate = req.body.answeredDate;
+												parking.save(function(err, savedParking) {
+													var freeParking = new FreeParking();
+													freeParking.owner = user;
+													freeParking.parkingSpace = req.body.parkingLot;
+													freeParking.startTime = parking.startTime;
+													freeParking.endTime = parking.endTime;
+													freeParking.canceled = false;
+													freeParking.registredDate = req.body.registredDate;
+													freeParking.parkingRequests.set(0, parking);
 
-										messageThread.messages.set(0, requestMessage);
-										messageThread.messages.set(1, responseMessage);
+													freeParking.save(function(err, updatedParking) {
+														if (err) {
+															res.send(err)
+														}
 
-										parking.messages = messageThread;
-										parking.answered = true;
-										parking.offerParkingUser = user;
-										parking.parkingLot = req.body.parkingLot;
-										parking.answeredDate = req.body.answeredDate;
+														pusher.trigger("USER-" + parking.requestUser[0]._id, 'parking-offer', {
+															"message": "Update current requests",
+															"parkingAnswered": true
+														});
+														pusher.trigger("global-request-channel", 'request-update', {});
 
-										var freeParking = new FreeParking();
-										freeParking.owner = user;
-										freeParking.parkingSpace = req.body.parkingLot;
-										freeParking.startTime = parking.startTime;
-										freeParking.endTime = parking.endTime;
-										freeParking.canceled = false;
-										freeParking.registredDate = req.body.registredDate;
-										freeParking.parkingRequests.set(0 , parking);
+														var pushToken = parking.requestUser[0].pushToken;
+														if (ENABLE_PUSH && pushToken) {
+															var client = new Pushwoosh(PUSH_APP_CODE, PUSH_AUTH_CODE);
+															client.sendMessage('Du har mottatt et svar på din parkeringsforespørsel', pushToken, function(error, response) {
+																if (error) {
+																	console.log('Some error occurs: ', error);
+																}
+															});
+														}
 
-										freeParking.save(function(err, updatedParking) {
-											if (err) {
-												res.send(err)
-											}
+														res.send(parking);
+													});
 
-											pusher.trigger("USER-" + parking.requestUser[0]._id, 'parking-offer', {
-												"message": "Update current requests",
-												"parkingAnswered": true
-											});
-											pusher.trigger("global-request-channel", 'request-update', {});
-
-											var pushToken = parking.requestUser[0].pushToken;
-											if (ENABLE_PUSH && pushToken) {
-												var client = new Pushwoosh(PUSH_APP_CODE, PUSH_AUTH_CODE);
-												client.sendMessage('Du har mottatt et svar på din parkeringsforespørsel', pushToken, function(error, response) {
-													if (error) {
-														console.log('Some error occurs: ', error);
-													}
 												});
-											}
-
-											res.send(parking);
+											});
 										});
 									}
-
 								})
 						}
 					}
