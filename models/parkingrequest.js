@@ -26,10 +26,10 @@ var ParkeringRequestSchema = new Schema({
         ref: 'ParkingSpace'
     }],
     requestMessage: String,
-    messages: [{
+    messages: {
         type: Schema.Types.ObjectId,
         ref: 'MessageThread'
-    }]
+    }
 });
 
 module.exports = mongoose.model('ParkingRequest', ParkeringRequestSchema);
