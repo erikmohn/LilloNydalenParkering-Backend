@@ -176,7 +176,7 @@ exports.offerParking = function(req, res) {
 										freeParking.endTime = parking.endTime;
 										freeParking.canceled = false;
 										freeParking.registredDate = req.body.registredDate;
-										freeParking.parkingRequests.push(parking);
+										freeParking.parkingRequests.set(0 , parking);
 
 										var messageThread = new MessageThread();
 
@@ -190,8 +190,8 @@ exports.offerParking = function(req, res) {
 										requestMessage.date = req.body.registredDate;
 										requestMessage.message = req.body.responseMessage;
 
-										messageThread.messages.push(requestMessage);
-										messageThread.messages.push(responseMessage);
+										messageThread.messages.set(0, requestMessage);
+										messageThread.messages.set(1, responseMessage);
 
 										parking.messages = messageThread;
 
