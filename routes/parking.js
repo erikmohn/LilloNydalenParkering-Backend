@@ -164,16 +164,18 @@ exports.offerParking = function(req, res) {
 										});
 									} else {
 										var requestMessage = new Message();
-										requestMessage.sender = parking.requestUser;
+										requestMessage.sender = parking.requestUser._id;
 										requestMessage.date = parking.registredDate;
 										requestMessage.message = parking.requestMessage;
 
 										requestMessage.save(function(err, newMessage) {
 											if (err)
-												console.log(err);
+												console.log("message: " + err);
 											var messageThread = new MessageThread();
 											messageThread.messages.push(newMessage);
 											messageThread.save(function(err, newMessageThread) {
+												if (err)
+												console.log("messageThread: " + err);
 												parking.messages = newMessageThread;
 												parking.answered = true;
 												parking.offerParkingUser = user;
@@ -181,9 +183,9 @@ exports.offerParking = function(req, res) {
 												parking.answeredDate = req.body.answeredDate;
 												parking.save(function(err, savedParking) {
 													if (err)
-														console.log(err);
+														console.log("parking: " + err);
 													var freeParking = new FreeParking();
-													freeParking.owner = user;
+													freeParking.owner = user._id;
 													freeParking.parkingSpace = req.body.parkingLot;
 													freeParking.startTime = parking.startTime;
 													freeParking.endTime = parking.endTime;
@@ -193,6 +195,7 @@ exports.offerParking = function(req, res) {
 
 													freeParking.save(function(err, updatedParking) {
 														if (err) {
+															console.log("freePArking: " + err);
 															res.send(err)
 														}
 
