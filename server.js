@@ -15,7 +15,6 @@ var Car = require('./models/car');
 var ParkingSpace = require('./models/parkingspace');
 var NotificationToken = require('./models/notificationtoken');
 var MessageThread = require('./models/messagethread');
-var MessageThread = require('./models/messagethread');
 var Message = require('./models/message');
 var FreeParking = require('./models/freeparking');
 var ParkingRequest = require('./models/parkingrequest');

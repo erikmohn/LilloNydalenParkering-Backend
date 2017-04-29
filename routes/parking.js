@@ -169,6 +169,8 @@ exports.offerParking = function(req, res) {
 										requestMessage.message = parking.requestMessage;
 
 										requestMessage.save(function(err, newMessage) {
+											if (err)
+												console.log(err);
 											var messageThread = new MessageThread();
 											messageThread.messages.push(newMessage);
 											messageThread.save(function(err, newMessageThread) {
@@ -178,6 +180,8 @@ exports.offerParking = function(req, res) {
 												parking.parkingLot = req.body.parkingLot;
 												parking.answeredDate = req.body.answeredDate;
 												parking.save(function(err, savedParking) {
+													if (err)
+														console.log(err);
 													var freeParking = new FreeParking();
 													freeParking.owner = user;
 													freeParking.parkingSpace = req.body.parkingLot;
