@@ -163,21 +163,6 @@ exports.offerParking = function(req, res) {
 											'ongoingParking': true
 										});
 									} else {
-
-										parking.answered = true;
-										parking.offerParkingUser = user;
-										parking.parkingLot = req.body.parkingLot;
-										parking.answeredDate = req.body.answeredDate;
-
-										var freeParking = new FreeParking();
-										freeParking.owner = user;
-										freeParking.parkingSpace = req.body.parkingLot;
-										freeParking.startTime = parking.startTime;
-										freeParking.endTime = parking.endTime;
-										freeParking.canceled = false;
-										freeParking.registredDate = req.body.registredDate;
-										freeParking.parkingRequests.set(0 , parking);
-
 										var messageThread = new MessageThread();
 
 										var requestMessage = new Message();
@@ -194,9 +179,19 @@ exports.offerParking = function(req, res) {
 										messageThread.messages.set(1, responseMessage);
 
 										parking.messages = messageThread;
+										parking.answered = true;
+										parking.offerParkingUser = user;
+										parking.parkingLot = req.body.parkingLot;
+										parking.answeredDate = req.body.answeredDate;
 
-										freeParking.markModified('parkingRequests');
-										parking.markModified('messages');
+										var freeParking = new FreeParking();
+										freeParking.owner = user;
+										freeParking.parkingSpace = req.body.parkingLot;
+										freeParking.startTime = parking.startTime;
+										freeParking.endTime = parking.endTime;
+										freeParking.canceled = false;
+										freeParking.registredDate = req.body.registredDate;
+										freeParking.parkingRequests.set(0 , parking);
 
 										freeParking.save(function(err, updatedParking) {
 											if (err) {
