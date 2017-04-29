@@ -195,6 +195,9 @@ exports.offerParking = function(req, res) {
 
 										parking.messages = messageThread;
 
+										freeParking.markModified('parkingRequests');
+										parking.markModified('messages');
+
 										freeParking.save(function(err, updatedParking) {
 											if (err) {
 												res.send(err)
