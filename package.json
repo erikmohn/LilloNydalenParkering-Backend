@@ -15,7 +15,7 @@
     "express": "~4.13.4",
     "moment": "2.13.0",
     "moment-timezone": "0.5.13",
-    "mongoose": "~4.4.14",
+    "mongoose": "4.9.6",
     "morgan": "1.7.0",
     "pusher": "1.5.1",
     "pushwoosh-client": "1.4.0",
