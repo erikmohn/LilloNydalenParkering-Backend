@@ -165,20 +165,20 @@ exports.offerParking = function(req, res) {
 									} else {
 
 										var messageThread = new MessageThread();
-										messageThread.messages.push(newMessage);
 
-										var requestMessage = new Message();
-										requestMessage.sender = parking.requestUser[0]._id;
-										requestMessage.date = parking.registredDate;
-										requestMessage.message = parking.requestMessage;
-										requestMessage.messageThread = messageThread;
-
-										requestMessage.save(function(err, newMessage) {
+										messageThread.save(function(err, newMessageThread) {
 											if (err)
-												console.log("message: " + err);
-											messageThread.save(function(err, newMessageThread) {
+												console.log("messageThread: " + err);
+
+											var requestMessage = new Message();
+											requestMessage.sender = parking.requestUser[0]._id;
+											requestMessage.date = parking.registredDate;
+											requestMessage.message = parking.requestMessage;
+											requestMessage.messageThread = newMessageThread._id;
+											requestMessage.save(function(err, newMessage) {
+
 												if (err)
-													console.log("messageThread: " + err);
+													console.log("message: " + err);
 												parking.messages = newMessageThread;
 												parking.answered = true;
 												parking.offerParkingUser = user;
