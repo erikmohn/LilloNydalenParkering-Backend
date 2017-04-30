@@ -3,14 +3,26 @@ var Message = require('../models/message');
 
 exports.getMessageThread = function(req, res) {
 	Message.find({
-		'messageThread': req.params.threadId
-	})
-	.populate('sender')
-	.exec(function(err, messages) {
-		if (err)
-			return res.send(err);
-		res.json(messages);
-	});
+			'messageThread': req.params.threadId
+		})
+		.populate('sender')
+		.exec(function(err, messages) {
+			if (err)
+				return res.send(err);
+			res.json(messages);
+		});
+};
+
+exports.getMessage = function(req, res) {
+	Message.findOne({
+			'_id': req.params.messageId
+		})
+		.populate('sender')
+		.exec(function(err, message) {
+			if (err)
+				return res.send(err);
+			res.json(message);
+		});
 };
 
 exports.postNewMessage = function(req, res) {
@@ -30,6 +42,7 @@ exports.postNewMessage = function(req, res) {
 			newMessage.message = req.body.message;
 			newMessage.sender = user;
 			newMessage.date = req.body.sendtDate;
+			newMessage.messageThread = req.body.threadId
 			newMessage.save(function(err, savedMessage) {
 				if (err) {
 					return res.send(err);
@@ -40,7 +53,9 @@ exports.postNewMessage = function(req, res) {
 						return res.send(err);
 					}
 
-					//TODO Implement pusher for message Thread update
+					pusher.trigger("MESSAGE-" + req.body.threadId, 'newMessage', {
+						"newMessage": savedMessage._id
+					});
 
 					return res.send({
 						result: "Message sendt!"
