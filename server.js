@@ -47,6 +47,7 @@ router.get('/user/cars/:userId', users.getUserCars);
 router.post('/user/cars/save', users.saveUserCars);
 
 router.get('/messages/:threadId', messages.getMessageThread);
+router.get('/messages/message/:messageId', messages.getMessage);
 router.post('/messages/new', messages.postNewMessage);
 
 router.post('/user/save', users.saveUser);
