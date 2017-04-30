@@ -2,6 +2,14 @@ var MessageThread = require('../models/messagethread');
 var Message = require('../models/message');
 var ParkingUser = require('../models/user');
 
+var pusher = new Pusher({
+	appId: '323709',
+	key: 'b3268785e53213585357',
+	secret: '0e34a2e3fdc069b66f01',
+	cluster: 'eu',
+	encrypted: true
+});
+
 exports.getMessageThread = function(req, res) {
 	Message.find({
 			'messageThread': req.params.threadId
