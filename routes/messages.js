@@ -1,5 +1,6 @@
 var MessageThread = require('../models/messagethread');
 var Message = require('../models/message');
+var ParkingUser = require('../models/user');
 
 exports.getMessageThread = function(req, res) {
 	Message.find({
