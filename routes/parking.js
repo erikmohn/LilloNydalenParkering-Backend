@@ -164,7 +164,7 @@ exports.offerParking = function(req, res) {
 										});
 									} else {
 										var requestMessage = new Message();
-										requestMessage.sender = parking.requestUser._id;
+										requestMessage.sender = parking.requestUser[0]._id;
 										requestMessage.date = parking.registredDate;
 										requestMessage.message = parking.requestMessage;
 
