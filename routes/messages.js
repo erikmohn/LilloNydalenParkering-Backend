@@ -57,24 +57,14 @@ exports.postNewMessage = function(req, res) {
 				if (err) {
 					return res.send(err);
 				}
-				messageThread.messages.push(savedMessage);
-				messageThread.save(function(err, savedMessageThread) {
-					if (err) {
-						return res.send(err);
-					}
-					
-					pusher.trigger("MESSAGE-" + req.body.threadId, 'newMessage', {
-						"newMessage": savedMessage._id
-					});
+				pusher.trigger("MESSAGE-" + req.body.threadId, 'newMessage', {
+					"newMessage": savedMessage._id
+				});
 
-					return res.send({
-						result: "Message sendt!"
-					});
+				return res.send({
+					result: "Message sendt!"
 				});
 			});
-
-
-			res.json(user);
 		});
 	});
 }
