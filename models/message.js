@@ -9,7 +9,7 @@ var MessageSchema = new Schema({
     messageThread: {
         type: Schema.Types.ObjectId,
         ref: 'MessageThread'
-    }
+    },
     date: Date,
 	message: String
 });
