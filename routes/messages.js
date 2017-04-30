@@ -6,7 +6,7 @@ exports.getMessageThread = function(req, res) {
 		'_id': req.params.threadId
 	})
 	.populate('messages')
-	.populate('sender')
+	.populate('messages.sender')
 	.exec(function(err, messageThread) {
 		if (err)
 			return res.send(err);
