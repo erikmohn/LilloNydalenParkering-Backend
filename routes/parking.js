@@ -163,19 +163,22 @@ exports.offerParking = function(req, res) {
 											'ongoingParking': true
 										});
 									} else {
+
+										var messageThread = new MessageThread();
+										messageThread.messages.push(newMessage);
+
 										var requestMessage = new Message();
 										requestMessage.sender = parking.requestUser[0]._id;
 										requestMessage.date = parking.registredDate;
 										requestMessage.message = parking.requestMessage;
+										requestMessage.messageThread = messageThread;
 
 										requestMessage.save(function(err, newMessage) {
 											if (err)
 												console.log("message: " + err);
-											var messageThread = new MessageThread();
-											messageThread.messages.push(newMessage);
 											messageThread.save(function(err, newMessageThread) {
 												if (err)
-												console.log("messageThread: " + err);
+													console.log("messageThread: " + err);
 												parking.messages = newMessageThread;
 												parking.answered = true;
 												parking.offerParkingUser = user;

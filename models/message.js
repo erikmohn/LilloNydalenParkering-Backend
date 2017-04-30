@@ -6,6 +6,10 @@ var MessageSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'ParkingUser'
     },
+    messageThread: {
+        type: Schema.Types.ObjectId,
+        ref: 'MessageThread'
+    }
     date: Date,
 	message: String
 });
