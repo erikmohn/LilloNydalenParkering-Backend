@@ -52,7 +52,7 @@ exports.postNewMessage = function(req, res) {
 					if (err) {
 						return res.send(err);
 					}
-
+					
 					pusher.trigger("MESSAGE-" + req.body.threadId, 'newMessage', {
 						"newMessage": savedMessage._id
 					});
