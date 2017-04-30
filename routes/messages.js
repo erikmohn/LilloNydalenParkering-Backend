@@ -1,5 +1,6 @@
 var MessageThread = require('../models/messagethread');
 var Message = require('../models/message');
+var Pusher = require('pusher');
 var ParkingUser = require('../models/user');
 
 var pusher = new Pusher({
