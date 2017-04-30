@@ -4,7 +4,9 @@ var Message = require('../models/message');
 exports.getMessageThread = function(req, res) {
 	MessageThread.findOne({
 		'_id': req.params.threadId
-	}, function(err, messageThread) {
+	})
+	.populate('sender')
+	.exec(function(err, messageThread) {
 		if (err)
 			return res.send(err);
 		res.json(messageThread.messages);
