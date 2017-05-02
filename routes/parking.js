@@ -392,8 +392,6 @@ exports.getPastRequests = function(req, res) {
 					.find({
 						'$or': [{
 							'requestUser': user
-						}, {
-							'offerParkingUser': user
 						}]
 					})
 					.populate("requestUser")
