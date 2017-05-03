@@ -409,3 +409,34 @@ exports.getPastRequests = function(req, res) {
 			}
 		});
 };
+
+exports.getPastOffers = function(req, res) {
+	ParkingUser
+		.findOne({
+			'_id': req.body.userId
+		})
+		.exec(function(err, user) {
+			if (err) {
+				return res.send(err);
+			} else {
+				ParkingRequest
+					.find({
+						'$or': [{
+							'offerParkingUser': user
+						}]
+					})
+					.populate("requestUser")
+					.populate("offerParkingUser")
+					.sort({
+						registredDate: 'desc'
+					})
+					.exec(function(err, parking) {
+						if (err) {
+							res.send(err);
+						} else {
+							res.json(parking);
+						}
+					});
+			}
+		});
+};

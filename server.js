@@ -63,6 +63,7 @@ router.post('/parking/requests', parking.getValidRequests);
 router.post('/parking/requests/past', parking.getPastRequests);
 
 router.post('/parking/offer', parking.offerParking);
+router.post('/parking/offer/past', parking.getPastOffers);
 
 router.post('/parking/free', parking.registerFreeParking);
 
