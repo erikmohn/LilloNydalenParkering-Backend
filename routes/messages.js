@@ -23,6 +23,19 @@ exports.getMessageThread = function(req, res) {
 		});
 };
 
+exports.getNumberOfMessages = function(req, res) {
+	Message.find({
+			'messageThread': req.params.threadId
+		})
+		.exec(function(err, messages) {
+			if (err)
+				return res.send(err);
+			res.json({
+				numberOfMessages: messages.length
+			});
+		});
+};
+
 exports.getMessage = function(req, res) {
 	Message.findOne({
 			'_id': req.params.messageId
