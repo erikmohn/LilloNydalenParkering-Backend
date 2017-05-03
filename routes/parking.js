@@ -174,7 +174,9 @@ exports.offerParking = function(req, res) {
 											requestMessage.sender = parking.requestUser[0]._id;
 											requestMessage.date = parking.registredDate;
 											requestMessage.message = parking.requestMessage;
-											requestMessage.messageThread = newMessageThread._id;
+											if (parking.requestMessage.length > 0) {
+												requestMessage.messageThread = newMessageThread._id;
+											}
 											requestMessage.save(function(err, newMessage) {
 
 												if (err)
