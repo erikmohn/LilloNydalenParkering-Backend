@@ -72,11 +72,12 @@ exports.postNewMessage = function(req, res) {
 					return res.send(err);
 				}
 				pusher.trigger("MESSAGE-" + req.body.threadId, 'newMessage', {
-					"newMessage": savedMessage._id
+					"newMessage": savedMessage._id,
+					"id": req.body.threadId
 				});
 
 				return res.send({
-					result: "Message sendt!"
+					result: "Message sendt!",
 				});
 			});
 		});
