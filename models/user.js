@@ -4,6 +4,7 @@ var Schema = mongoose.Schema;
 var UserSchema = new Schema({
 	firstName: String,
 	lastName: String,
+	profilePicture: { data: Buffer, contentType: String },
 	phoneNumber: String,
 	parkingSpace: String,
 	regnr: String,

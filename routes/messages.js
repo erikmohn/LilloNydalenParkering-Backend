@@ -32,6 +32,7 @@ exports.getNumberOfMessages = function(req, res) {
 				return res.send(err);
 			res.json({
 				numberOfMessages: messages.length
+				id: req.params.threadId
 			});
 		});
 };
