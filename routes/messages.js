@@ -16,6 +16,9 @@ exports.getMessageThread = function(req, res) {
 			'messageThread': req.params.threadId
 		})
 		.populate('sender')
+		.sort({
+			date: 'asc'
+		})
 		.exec(function(err, messages) {
 			if (err)
 				return res.send(err);
