@@ -153,12 +153,12 @@ exports.offerParking = function(req, res) {
 					if (err || !parking) {
 						res.status(500).send(err);
 					} else {
+						console.log(parking);
 						if (parking.answered) {
 							res.send({
 								'alreadyAnswered': true
 							});
 						} else {
-
 							ParkingRequest.find({
 									'_id': {
 										$ne: req.body.parkingId
@@ -238,8 +238,6 @@ exports.offerParking = function(req, res) {
 
 														res.send(parking);
 													}
-
-
 												});
 											});
 										});
