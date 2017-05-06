@@ -88,7 +88,7 @@ exports.registerFreeParking = function(req, res) {
 			parking.owner = user;
 			parking.parkingSpace = req.body.parkingSpace;
 			parking.startTime = req.body.starTime;
-			parking.endTime = req.body.end()Time;
+			parking.endTime = req.body.endTime;
 			parking.canceled = false;
 			parking.registredDate = req.body.registredDate;
 			parking.save(function(err) {
