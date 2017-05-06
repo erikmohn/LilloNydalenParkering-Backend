@@ -108,7 +108,10 @@ exports.getMyAvailableParking = function(req, res) {
 		})
 		.populate('owner')
 		.populate('singleParkingRequest')
-		.populate('singleParkingRequest.requestUser')
+		.populate({
+			path: 'singleParkingRequest.requestUser',
+			model: 'ParkingUser'
+		})
 		.exec(function(err, freeParkings) {
 			if (err) {
 				res.send(err);
@@ -236,7 +239,7 @@ exports.offerParking = function(req, res) {
 														freeParking.endTime = savedParking.endTime;
 														freeParking.canceled = false;
 														freeParking.registredDate = req.body.answeredDate;
-														freeParking.singleParkingRequest = savedParking; 
+														freeParking.singleParkingRequest = savedParking;
 														freeParking.save(function(err, savedFreeParking) {
 															pusher.trigger("USER-" + parking.requestUser[0]._id, 'parking-offer', {
 																"message": "Update current requests",
