@@ -88,7 +88,7 @@ exports.registerFreeParking = function(req, res) {
 			parking.owner = user;
 			parking.parkingSpace = req.body.parkingSpace;
 			parking.startTime = req.body.starTime;
-			parking.endTime = req.body.endTime;
+			parking.endTime = req.body.end()Time;
 			parking.canceled = false;
 			parking.registredDate = req.body.registredDate;
 			parking.save(function(err) {
@@ -107,7 +107,7 @@ exports.registerFreeParking = function(req, res) {
 
 exports.getMyAvailableParking = function(req, res) {
 	FreeParking.find({
-			'userId': req.body.userId
+			'owner': req.body.userId
 		})
 		.populate('owner')
 		.exec(function(err, freeParkings) {
