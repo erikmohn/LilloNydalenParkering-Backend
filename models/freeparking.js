@@ -14,7 +14,7 @@ var FreeParkingSchema = new Schema({
     startTime: Date,
     endTime: Date,
     canceled: Boolean,
-    registred: Date,
+    registredDate: Date,
     responseMessage: String
 });
 

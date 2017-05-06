@@ -218,23 +218,9 @@ exports.offerParking = function(req, res) {
 												parking.parkingLot = req.body.parkingLot;
 												parking.answeredDate = req.body.answeredDate;
 												parking.save(function(err, savedParking) {
-													if (err)
+													if (err) {
 														console.log("parking: " + err);
-													var freeParking = new FreeParking();
-													freeParking.owner = user._id;
-													freeParking.parkingSpace = req.body.parkingLot;
-													freeParking.startTime = parking.startTime;
-													freeParking.endTime = parking.endTime;
-													freeParking.canceled = false;
-													freeParking.registredDate = req.body.registredDate;
-													freeParking.parkingRequests.set(0, parking);
-
-													freeParking.save(function(err, updatedParking) {
-														if (err) {
-															console.log("freePArking: " + err);
-															res.send(err)
-														}
-
+													} else {
 														pusher.trigger("USER-" + parking.requestUser[0]._id, 'parking-offer', {
 															"message": "Update current requests",
 															"parkingAnswered": true
@@ -252,7 +238,8 @@ exports.offerParking = function(req, res) {
 														}
 
 														res.send(parking);
-													});
+													}
+
 
 												});
 											});
