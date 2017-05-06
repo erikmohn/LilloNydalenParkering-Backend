@@ -59,9 +59,6 @@ exports.requestParking = function(req, res) {
 								console.log('Some error occurs: ', error);
 							}
 						});
-
-
-
 					}
 
 					pusher.trigger("global-request-channel", 'request-update', {});
@@ -197,8 +194,10 @@ exports.offerParking = function(req, res) {
 										var messageThread = new MessageThread();
 
 										messageThread.save(function(err, newMessageThread) {
-											if (err){
-
+											if (err) {
+												res.status(500).json({
+													'msg': "Failed"
+												});
 											}
 
 											var requestMessage = new Message();
@@ -210,8 +209,12 @@ exports.offerParking = function(req, res) {
 											}
 											requestMessage.save(function(err, newMessage) {
 
-												if (err)
+												if (err) {
 													console.log("message: " + err);
+													res.status(500).json({
+														'msg': "Failed"
+													});
+												}
 												parking.messages = newMessageThread;
 												parking.answered = true;
 												parking.offerParkingUser = user;
@@ -220,24 +223,36 @@ exports.offerParking = function(req, res) {
 												parking.save(function(err, savedParking) {
 													if (err) {
 														console.log("parking: " + err);
-													} else {
-														pusher.trigger("USER-" + parking.requestUser[0]._id, 'parking-offer', {
-															"message": "Update current requests",
-															"parkingAnswered": true
+														res.status(500).json({
+															'msg': "Failed"
 														});
-														pusher.trigger("global-request-channel", 'request-update', {});
-
-														var pushToken = parking.requestUser[0].pushToken;
-														if (ENABLE_PUSH && pushToken) {
-															var client = new Pushwoosh(PUSH_APP_CODE, PUSH_AUTH_CODE);
-															client.sendMessage('Du har mottatt et svar på din parkeringsforespørsel', pushToken, function(error, response) {
-																if (error) {
-																	console.log('Some error occurs: ', error);
-																}
+													} else {
+														var freeParking = new FreeParking();
+														freeParking.owner = user;
+														freeParking.parkingSpace = req.body.parkingSpace;
+														freeParking.startTime = savedParking.starTime;
+														freeParking.endTime = savedParking.endTime;
+														freeParking.canceled = false;
+														freeParking.registredDate = req.body.answeredDate;
+														freeParking.singleParkingRequest = savedParking; 
+														freeParking.save(function(err, savedFreeParking) {
+															pusher.trigger("USER-" + parking.requestUser[0]._id, 'parking-offer', {
+																"message": "Update current requests",
+																"parkingAnswered": true
 															});
-														}
+															pusher.trigger("global-request-channel", 'request-update', {});
 
-														res.send(parking);
+															var pushToken = parking.requestUser[0].pushToken;
+															if (ENABLE_PUSH && pushToken) {
+																var client = new Pushwoosh(PUSH_APP_CODE, PUSH_AUTH_CODE);
+																client.sendMessage('Du har mottatt et svar på din parkeringsforespørsel', pushToken, function(error, response) {
+																	if (error) {
+																		console.log('Some error occurs: ', error);
+																	}
+																});
+															}
+															res.send(parking);
+														});
 													}
 												});
 											});

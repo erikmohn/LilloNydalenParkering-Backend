@@ -10,6 +10,10 @@ var FreeParkingSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'ParkingRequest'
     }],
+    singleParkingRequest: {
+        type: Schema.Types.ObjectId,
+        ref: 'ParkingRequest'
+    },
     parkingSpace: String,
     startTime: Date,
     endTime: Date,
