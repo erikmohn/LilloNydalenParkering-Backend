@@ -108,15 +108,15 @@ exports.getMyAvailableParking = function(req, res) {
 		})
 		.populate('owner')
 		.populate('singleParkingRequest')
-		.populate({
-			path: 'singleParkingRequest.requestUser',
-			model: 'ParkingUser'
-		})
 		.exec(function(err, freeParkings) {
 			if (err) {
 				res.send(err);
 			} else {
-				res.json(freeParkings);
+				ParkingUser.populate(freeParkings, {
+					path: 'singleParkingRequest.requestUser'
+				}, function(err, result) {
+					res.json(result);
+				});
 			}
 		});
 };
