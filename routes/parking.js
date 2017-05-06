@@ -102,12 +102,31 @@ exports.registerFreeParking = function(req, res) {
 	});
 };
 
+exports.getFreeParking = function(req, res) {
+	FreeParking.findOne({
+			'_id': req.body.freeId
+		})
+		.populate('parkingRequests')
+		.exec(function(err, freeParking) {
+			if (err) {
+				res.send(err);
+			} else {
+				ParkingUser.populate(freeParking, {
+					path: 'parkingRequests.requestUser'
+				}, function(err, result) {
+					res.json(result);
+				});
+			}
+		})
+}
+
 exports.getMyAvailableParking = function(req, res) {
 	FreeParking.find({
 			'owner': req.body.userId
 		})
 		.populate('owner')
 		.populate('singleParkingRequest')
+		.populate('parkingRequests')
 		.exec(function(err, freeParkings) {
 			if (err) {
 				res.send(err);
