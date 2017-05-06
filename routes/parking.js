@@ -153,7 +153,6 @@ exports.offerParking = function(req, res) {
 					if (err || !parking) {
 						res.status(500).send(err);
 					} else {
-						console.log(parking);
 						if (parking.answered) {
 							res.send({
 								'alreadyAnswered': true
@@ -198,9 +197,11 @@ exports.offerParking = function(req, res) {
 										var messageThread = new MessageThread();
 
 										messageThread.save(function(err, newMessageThread) {
-											if (err)
+											if (err){
 
-												var requestMessage = new Message();
+											}
+
+											var requestMessage = new Message();
 											requestMessage.sender = parking.requestUser[0]._id;
 											requestMessage.date = parking.registredDate;
 											requestMessage.message = parking.requestMessage;
