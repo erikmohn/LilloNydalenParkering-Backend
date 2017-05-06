@@ -150,7 +150,7 @@ exports.offerParking = function(req, res) {
 				})
 				.populate("requestUser")
 				.exec(function(err, parking) {
-					if (err) {
+					if (err || !parking) {
 						res.status(500).send(err);
 					} else {
 						if (parking.answered) {
