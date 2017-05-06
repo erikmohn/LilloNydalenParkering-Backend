@@ -103,7 +103,39 @@ exports.registerFreeParking = function(req, res) {
 			});
 		}
 	});
+};
 
+exports.getMyAvailableParking = function(req, res) {
+	FreeParking.find({
+			'userId': req.body.userId
+		})
+		.populate('owner')
+		.exec(function(err, freeParkings) {
+			if (err) {
+				res.send(err);
+			} else {
+				res.json(freeParkings);
+			}
+		});
+};
+
+
+exports.cancleFreeParking = function(req, res) {
+	FreeParking.findOne({
+			'freeParkingId': req.body.freeParkingId
+		})
+		.exec(function(err, freeParking) {
+			if (err) {
+				res.send(err);
+			} else {
+				freeParking.canceled = true;
+				freeParking.save(function(err, savedParking) {
+					res.json({
+						message: "Canceled free parking!"
+					});
+				})
+			}
+		});
 };
 
 exports.offerParking = function(req, res) {
@@ -157,7 +189,7 @@ exports.offerParking = function(req, res) {
 										console.log("FAILED!!!! " + onGoingErr);
 										//res.status(500).send(onGoingErr);
 									}
-									console.log(ongoingParking.length > 0);
+
 									if (ongoingParking.length > 0) {
 										res.send({
 											'ongoingParking': true
@@ -168,9 +200,8 @@ exports.offerParking = function(req, res) {
 
 										messageThread.save(function(err, newMessageThread) {
 											if (err)
-												console.log("messageThread: " + err);
 
-											var requestMessage = new Message();
+												var requestMessage = new Message();
 											requestMessage.sender = parking.requestUser[0]._id;
 											requestMessage.date = parking.registredDate;
 											requestMessage.message = parking.requestMessage;

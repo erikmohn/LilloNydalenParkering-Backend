@@ -66,6 +66,9 @@ router.post('/parking/offer', parking.offerParking);
 router.post('/parking/offer/past', parking.getPastOffers);
 
 router.post('/parking/free', parking.registerFreeParking);
+router.post('/parking/free/past', parking.getMyAvailableParking);
+router.post('/parking/free/cancle', parking.cancleFreeParking);
+
 
 
 router.post('/parking/cancle', parking.cancleParking);
