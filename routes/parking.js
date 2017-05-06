@@ -108,6 +108,7 @@ exports.getMyAvailableParking = function(req, res) {
 		})
 		.populate('owner')
 		.populate('singleParkingRequest')
+		.populate('singleParkingRequest.requestUser')
 		.exec(function(err, freeParkings) {
 			if (err) {
 				res.send(err);
