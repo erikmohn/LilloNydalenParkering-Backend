@@ -53,14 +53,14 @@ exports.requestParking = function(req, res) {
 				.populate('parkingRequests')
 				.exec(function(err, freeParkings) {
 					var elligbleParking = [];
-					var start = moment(req.body.starTime);
-					var end = moment(req.body.endTime);
+					var start = Moment(req.body.starTime);
+					var end = Moment(req.body.endTime);
 
 					freeParkings.forEach(function(freeParking) {
 						var canUse = true;
 						freeParking.parkingRequests.forEach(function(existing) {
-							var eStart = moment(existing.startTime);
-							var eEnd = moment(existing.endTime);
+							var eStart = Moment(existing.startTime);
+							var eEnd = Moment(existing.endTime);
 							if ((eStart.isBefore(start) || eStart.isSame(start)) && ((eEnd.isAfter(end) || eEnd.isSame(end)))) {
 								canUse = false;
 							}
@@ -76,14 +76,14 @@ exports.requestParking = function(req, res) {
 					var parkingToUse;
 
 					elligbleParking.forEach(function(elligble) {
-						var eStart = moment(elligble.startTime);
-						var eEnd = moment(elligble.endTime);
+						var eStart = Moment(elligble.startTime);
+						var eEnd = Moment(elligble.endTime);
 
 						var availableMinutes = eStart.diff(eEnd, 'minutes');
 
 						elligble.parkingRequests.forEach(function(reduceBy) {
-							var rStart = moment(reduceBy.startTime);
-							var rEnd = moment(reduceBy.endTime);
+							var rStart = Moment(reduceBy.startTime);
+							var rEnd = Moment(reduceBy.endTime);
 
 							var reduceTime = rStart.diff(rEnd, 'minutes');
 							availableMinutes = availableMinutes - reduceTime;
