@@ -30,25 +30,28 @@ exports.requestParking = function(req, res) {
 		} else {
 			FreeParking.find({
 					'canceled': false,
-					'ownder': {$ne: user},
-					'startTime': {$lt: req.body.startTime}
-					/*'$and': [{
-						'$or': [{
-								'startTime': {
-									$lt: req.body.startTime
-								},
-								'startTime': req.body.startTime
-							}
+					'ownder': {
+						$ne: user
+					},
+					//'startTime': {$lt: req.body.startTime}
+					'$and': [{
+							'$or': [{
+									'startTime': {
+										$lt: req.body.startTime
+									},
+									'startTime': req.body.startTime
+								}
 
-						]
-					}, {
-						'$or': [{
-							'endTime': {
-								$gt: req.body.endTime
-							},
-							'endTime': req.body.endTime
+							]
 						}]
-					}]*/
+						/*, {
+												'$or': [{
+													'endTime': {
+														$gt: req.body.endTime
+													},
+													'endTime': req.body.endTime
+												}]
+											}]*/
 				})
 				.populate('parkingRequests')
 				.exec(function(err, freeParkings) {
