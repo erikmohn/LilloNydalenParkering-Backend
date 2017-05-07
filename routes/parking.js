@@ -28,47 +28,129 @@ exports.requestParking = function(req, res) {
 		if (err) {
 			res.send(err);
 		} else {
-			var parking = new ParkingRequest();
-			parking.requestUser = user;
-			parking.regNr = req.body.regNr;
-			parking.startTime = req.body.starTime;
-			parking.endTime = req.body.endTime;
-			parking.phoneNumber = req.body.phoneNumber;
-			parking.answered = false;
-			parking.canceled = false;
-			parking.done = false;
-			parking.registredDate = req.body.registredDate;
-			parking.requestMessage = req.body.requestMessage;
-			parking.save(function(err) {
-				if (err) {
-					res.send(err);
-				} else {
-					if (ENABLE_PUSH) {
-						var client = new Pushwoosh(PUSH_APP_CODE, PUSH_AUTH_CODE);
+			FreeParking.find({
+					'canceled': false,
+					'singleParkingRequest': null,
+					'$and': [{
+						'$or': [{
+								'startTime': {
+									$lt: req.body.starTime
+								},
+								'startTime': req.body.starTime
+							}
 
-						String.prototype.capitalizeFirstLetter = function() {
-							return this.charAt(0).toUpperCase() + this.slice(1);
-						}
+						]
+					}, {
+						'$or': [{
+							'endTime': {
+								$gt: req.body.endTime
+							},
+							'endTime': req.body.endTime
+						}]
+					}]
 
-						var message = user.userName + " spør etter parkering: \n" +
-							"Fra: " + Moment(parking.startTime).tz("Europe/Oslo").locale("nb").format(" dddd HH:mm").capitalizeFirstLetter() + " " +
-							"Til: " + Moment(parking.endTime).tz("Europe/Oslo").locale("nb").format(" dddd HH:mm").capitalizeFirstLetter();
+				})
+				.populate('parkingRequests')
+				.exec(function(err, freeParkings) {
+					var elligbleParking = [];
+					var start = moment(req.body.starTime);
+					var end = moment(req.body.endTime);
 
-						client.sendMessage(message, function(error, response) {
-							if (error) {
-								console.log('Some error occurs: ', error);
+					freeParkings.forEach(function(freeParking) {
+						var canUse = true;
+						freeParking.parkingRequests.forEach(function(existing) {
+							var eStart = moment(existing.startTime);
+							var eEnd = moment(existing.endTime);
+							if ((eStart.isBefore(start) || eStart.isSame(start)) && ((eEnd.isAfter(end) || eEnd.isSame(end)))) {
+								canUse = false;
 							}
 						});
+						if (canUse) {
+							elligbleParking.push(freeParking);
+						}
+					});
+
+
+					var neededMinutes = start.diff(end, 'minutes');
+					var leastOccupying = 0;
+					var parkingToUse;
+
+					elligbleParking.forEach(function(elligble) {
+						var eStart = moment(elligble.startTime);
+						var eEnd = moment(elligble.endTime);
+
+						var availableMinutes = eStart.diff(eEnd, 'minutes');
+
+						elligble.parkingRequests.forEach(function(reduceBy) {
+							var rStart = moment(reduceBy.startTime);
+							var rEnd = moment(reduceBy.endTime);
+
+							var reduceTime = rStart.diff(rEnd, 'minutes');
+							availableMinutes = availableMinutes - reduceTime;
+						});
+
+						var usePercentage = (neededMinutes / availableMinutes) * 100;
+
+						if (usePercentage > leastOccupying) {
+							leastOccupying = usePercentage;
+							parkingToUse = elligble;
+						}
+					});
+
+
+
+					var parking = new ParkingRequest();
+					parking.requestUser = user;
+					parking.regNr = req.body.regNr;
+					parking.startTime = req.body.starTime;
+					parking.endTime = req.body.endTime;
+					parking.phoneNumber = req.body.phoneNumber;
+					parking.answered = false;
+					parking.canceled = false;
+					parking.done = false;
+					parking.registredDate = req.body.registredDate;
+					parking.requestMessage = req.body.requestMessage;
+
+					if (parkingToUse) {
+						//parking.messages = newMessageThread;
+						parking.answered = true;
+						parking.offerParkingUser = parkingToUse.owner;
+						parking.parkingLot = parkingToUse.parkingSpace;
+						parking.answeredDate = req.body.registredDate;
 					}
 
-					pusher.trigger("global-request-channel", 'request-update', {});
+					parking.save(function(err) {
+						if (err) {
+							res.send(err);
+						} else {
+							if (ENABLE_PUSH) {
+								var client = new Pushwoosh(PUSH_APP_CODE, PUSH_AUTH_CODE);
 
-					res.json({
-						message: 'Parking request saved!',
-						request: parking
+								String.prototype.capitalizeFirstLetter = function() {
+									return this.charAt(0).toUpperCase() + this.slice(1);
+								}
+
+								var message = user.userName + " spør etter parkering: \n" +
+									"Fra: " + Moment(parking.startTime).tz("Europe/Oslo").locale("nb").format(" dddd HH:mm").capitalizeFirstLetter() + " " +
+									"Til: " + Moment(parking.endTime).tz("Europe/Oslo").locale("nb").format(" dddd HH:mm").capitalizeFirstLetter();
+
+								client.sendMessage(message, function(error, response) {
+									if (error) {
+										console.log('Some error occurs: ', error);
+									}
+								});
+							}
+
+							pusher.trigger("global-request-channel", 'request-update', {});
+
+							res.json({
+								message: 'Parking request saved!',
+								request: parking
+							});
+						}
 					});
-				}
-			});
+
+				});
 		}
 	});
 };
