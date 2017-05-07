@@ -31,7 +31,7 @@ exports.requestParking = function(req, res) {
 			FreeParking.find({
 					'canceled': false,
 					'singleParkingRequest': null,
-					'ownder': {$ne: user}
+					'ownder': {$ne: user},
 					'$and': [{
 						'$or': [{
 								'startTime': {
