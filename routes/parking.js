@@ -58,12 +58,15 @@ exports.requestParking = function(req, res) {
 					var end = Moment(new Date(req.body.endTime));
 
 					freeParkings.forEach(function(freeParking) {
+						console.log("See if this parking can be used in timeframe?");
 						var canUse = true;
 						freeParking.parkingRequests.forEach(function(existing) {
+							console.log("Check if other parking has taken time slot");
 							var eStart = Moment(existing.startTime);
 							var eEnd = Moment(existing.endTime);
 							if ((eStart.isBefore(start) || eStart.isSame(start)) && ((eEnd.isAfter(end) || eEnd.isSame(end)))) {
 								canUse = false;
+								console.log("This time slot is taken, find another free parking");
 							}
 						});
 						if (canUse) {
