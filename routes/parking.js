@@ -66,8 +66,10 @@ exports.requestParking = function(req, res) {
 							var eStart = Moment(existing.startTime);
 							var eEnd = Moment(existing.endTime);
 							if ((eStart.isBefore(start) || eStart.isSame(start)) && ((eEnd.isAfter(end) || eEnd.isSame(end)))) {
-								canUse = false;
-								console.log("This time slot is taken, find another free parking");
+								if (!existing.canceled) {
+									canUse = false;
+									console.log("This time slot is taken, find another free parking");
+								}
 							}
 						});
 						if (canUse) {
@@ -98,7 +100,7 @@ exports.requestParking = function(req, res) {
 						var usePercentage = (neededMinutes / availableMinutes) * 100;
 
 						if (usePercentage > leastOccupying) {
-							console.log("found parking with more accurate fit");
+							console.log("found parking with more accurate fit, with usage %: " + usePercentage);
 							leastOccupying = usePercentage;
 							parkingToUse = elligble;
 						}
