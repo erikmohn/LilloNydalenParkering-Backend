@@ -31,7 +31,7 @@ exports.requestParking = function(req, res) {
 			FreeParking.find({
 					'canceled': false,
 					//'ownder': {$ne: user},
-					'$and': [{
+					/*'$and': [{
 						'$or': [{
 								'startTime': {
 									$lt: req.body.starTime
@@ -47,12 +47,13 @@ exports.requestParking = function(req, res) {
 							},
 							'endTime': req.body.endTime
 						}]
-					}]
+					}]*/
 
 				})
 				.populate('parkingRequests')
 				.exec(function(err, freeParkings) {
 					console.log("Found free parking");
+					console.log(freeParking);
 					var elligbleParking = [];
 					var start = Moment(new Date(req.body.starTime));
 					var end = Moment(new Date(req.body.endTime));
