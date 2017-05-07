@@ -30,7 +30,7 @@ exports.requestParking = function(req, res) {
 		} else {
 			FreeParking.find({
 					'canceled': false,
-					//'ownder': {$ne: user},
+					'ownder': {$ne: user},
 					/*'$and': [{
 						'$or': [{
 								'startTime': {
@@ -248,7 +248,7 @@ exports.getMyAvailableParking = function(req, res) {
 
 exports.cancleFreeParking = function(req, res) {
 	FreeParking.findOne({
-			'freeParkingId': req.body.freeParkingId
+			'_id': req.body.freeParkingId
 		})
 		.exec(function(err, freeParking) {
 			if (err) {
