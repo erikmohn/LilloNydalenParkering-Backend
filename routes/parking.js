@@ -33,14 +33,26 @@ exports.requestParking = function(req, res) {
 					'ownder': {
 						$ne: user
 					},
-					'startTime': {
-						$lt: req.body.startTime,
-						$eq: req.body.startTime
-					},
-					'endTime': {
-						$gt: req.body.endTime,
-						$eq: req.body.endTime
-					}
+					$or: [{
+						startTime: {
+							$lt: req.body.startTime
+						}
+
+					}, {
+						startTime: {
+							$eq: req.body.startTime
+						}
+					}],
+					$or: [{
+						endTime: {
+							$gt: req.body.endTime
+						}
+
+					}, {
+						endTime: {
+							$eq: req.body.endTime
+						}
+					}]
 				})
 				.populate('parkingRequests')
 				.exec(function(err, freeParkings) {
