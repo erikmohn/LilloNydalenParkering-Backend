@@ -54,8 +54,8 @@ exports.requestParking = function(req, res) {
 				.exec(function(err, freeParkings) {
 					console.log("Found free parking");
 					var elligbleParking = [];
-					var start = Moment(req.body.starTime);
-					var end = Moment(req.body.endTime);
+					var start = Moment(new Date(req.body.starTime));
+					var end = Moment(new Date(req.body.endTime));
 
 					freeParkings.forEach(function(freeParking) {
 						var canUse = true;
