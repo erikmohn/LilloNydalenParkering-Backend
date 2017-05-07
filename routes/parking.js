@@ -31,12 +31,13 @@ exports.requestParking = function(req, res) {
 			FreeParking.find({
 					'canceled': false,
 					'ownder': {$ne: user},
-					'$and': [{
+					'startTime': {$lt: req.body.startTime}
+					/*'$and': [{
 						'$or': [{
 								'startTime': {
-									$lt: req.body.starTime
+									$lt: req.body.startTime
 								},
-								'startTime': req.body.starTime
+								'startTime': req.body.startTime
 							}
 
 						]
@@ -47,14 +48,14 @@ exports.requestParking = function(req, res) {
 							},
 							'endTime': req.body.endTime
 						}]
-					}]
+					}]*/
 				})
 				.populate('parkingRequests')
 				.exec(function(err, freeParkings) {
 					console.log("Found free parking");
 					console.log(freeParkings);
 					var elligbleParking = [];
-					var start = Moment(new Date(req.body.starTime));
+					var start = Moment(new Date(req.body.startTime));
 					var end = Moment(new Date(req.body.endTime));
 
 					freeParkings.forEach(function(freeParking) {
@@ -110,7 +111,7 @@ exports.requestParking = function(req, res) {
 					var parking = new ParkingRequest();
 					parking.requestUser = user;
 					parking.regNr = req.body.regNr;
-					parking.startTime = req.body.starTime;
+					parking.startTime = req.body.startTime;
 					parking.endTime = req.body.endTime;
 					parking.phoneNumber = req.body.phoneNumber;
 					parking.answered = false;
@@ -188,7 +189,7 @@ exports.registerFreeParking = function(req, res) {
 			var parking = new FreeParking();
 			parking.owner = user;
 			parking.parkingSpace = req.body.parkingSpace;
-			parking.startTime = req.body.starTime;
+			parking.startTime = req.body.startTime;
 			parking.endTime = req.body.endTime;
 			parking.canceled = false;
 			parking.registredDate = req.body.registredDate;
