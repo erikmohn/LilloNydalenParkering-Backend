@@ -31,6 +31,7 @@ exports.requestParking = function(req, res) {
 			FreeParking.find({
 					'canceled': false,
 					'singleParkingRequest': null,
+					'ownder': {$ne: user}
 					'$and': [{
 						'$or': [{
 								'startTime': {
@@ -112,17 +113,18 @@ exports.requestParking = function(req, res) {
 					parking.requestMessage = req.body.requestMessage;
 
 					if (parkingToUse) {
-						//parking.messages = newMessageThread;
+						parking.messages = new MessageThread();
 						parking.answered = true;
 						parking.offerParkingUser = parkingToUse.owner;
 						parking.parkingLot = parkingToUse.parkingSpace;
 						parking.answeredDate = req.body.registredDate;
 					}
 
-					parking.save(function(err) {
+					parking.save(function(err, savedParking) {
 						if (err) {
 							res.send(err);
 						} else {
+
 							if (ENABLE_PUSH) {
 								var client = new Pushwoosh(PUSH_APP_CODE, PUSH_AUTH_CODE);
 
@@ -143,10 +145,22 @@ exports.requestParking = function(req, res) {
 
 							pusher.trigger("global-request-channel", 'request-update', {});
 
-							res.json({
-								message: 'Parking request saved!',
-								request: parking
-							});
+							if (parkingToUse) {
+								parkingToUse.parkingRequests.push(savedParking);
+
+								parkingToUse.save(function(err, savedFreeParking) {
+									res.json({
+										message: 'Parking request saved!',
+										request: savedParking
+									});
+								})
+							} else {
+								res.json({
+									message: 'Parking request saved!',
+									request: savedParking
+								});
+							}
+
 						}
 					});
 
