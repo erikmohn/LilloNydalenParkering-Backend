@@ -53,6 +53,7 @@ exports.requestParking = function(req, res) {
 				})
 				.populate('parkingRequests')
 				.exec(function(err, freeParkings) {
+					console.log("Found free parking");
 					var elligbleParking = [];
 					var start = Moment(req.body.starTime);
 					var end = Moment(req.body.endTime);
@@ -67,6 +68,7 @@ exports.requestParking = function(req, res) {
 							}
 						});
 						if (canUse) {
+							console.log("Found parking where timeslot is open");
 							elligbleParking.push(freeParking);
 						}
 					});
@@ -93,6 +95,7 @@ exports.requestParking = function(req, res) {
 						var usePercentage = (neededMinutes / availableMinutes) * 100;
 
 						if (usePercentage > leastOccupying) {
+							console.log("found parking with more accurate fit");
 							leastOccupying = usePercentage;
 							parkingToUse = elligble;
 						}
@@ -113,6 +116,7 @@ exports.requestParking = function(req, res) {
 					parking.requestMessage = req.body.requestMessage;
 
 					if (parkingToUse) {
+						console.log("Will allocate parking directly");
 						parking.messages = new MessageThread();
 						parking.answered = true;
 						parking.offerParkingUser = parkingToUse.owner;
