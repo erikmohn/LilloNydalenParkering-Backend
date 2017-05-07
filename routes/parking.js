@@ -53,7 +53,7 @@ exports.requestParking = function(req, res) {
 				.populate('parkingRequests')
 				.exec(function(err, freeParkings) {
 					console.log("Found free parking");
-					console.log(freeParking);
+					console.log(freeParkings);
 					var elligbleParking = [];
 					var start = Moment(new Date(req.body.starTime));
 					var end = Moment(new Date(req.body.endTime));
