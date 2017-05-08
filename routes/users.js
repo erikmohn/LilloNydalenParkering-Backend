@@ -20,7 +20,8 @@ exports.saveUser = function(req, res) {
                     user.firstName = req.body.firstName;
                     user.lastName = req.body.lastName;
                     user.phoneNumber = req.body.phoneNumber;
-                    user.epost = req.body.epost
+                    user.epost = req.body.epost;
+                    user.fbProfilePictureUrl = req.body.fbProfilePictureUrl;
                     user.save(function(err) {
                         if (err)
                             res.send(err);

@@ -15,6 +15,7 @@ var UserSchema = new Schema({
 	pushToken: String,
 	password: String,
 	activated: Boolean,
+	fbProfilePictureUrl: String,
 	cars: [{
         type: Schema.Types.ObjectId,
         ref: 'ParkingSpace'
