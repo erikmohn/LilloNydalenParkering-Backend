@@ -21,7 +21,6 @@ exports.saveUser = function(req, res) {
                     user.lastName = req.body.lastName;
                     user.phoneNumber = req.body.phoneNumber;
                     user.epost = req.body.epost;
-                    user.fbProfilePictureUrl = req.body.fbProfilePictureUrl;
                     user.save(function(err) {
                         if (err)
                             res.send(err);
@@ -134,6 +133,7 @@ exports.newUser = function(req, res) {
             user.pushToken = req.body.pushToken;
             user.password = req.body.password;
             user.activated = true;
+            user.fbProfilePictureUrl = req.body.fbProfilePictureUrl;
             objectsToSave.push(user);
 
             if (req.body.parkingSpace.length != 0) {
