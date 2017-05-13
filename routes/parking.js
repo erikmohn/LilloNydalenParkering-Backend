@@ -145,7 +145,7 @@ exports.requestParking = function(req, res) {
 									return this.charAt(0).toUpperCase() + this.slice(1);
 								}
 
-								var message = user.firstName + " " + user.lastName " spør etter parkering: \n" +
+								var message = user.firstName + " " + user.lastName + " spør etter parkering: \n" +
 									"Fra: " + Moment(parking.startTime).tz("Europe/Oslo").locale("nb").format(" dddd HH:mm").capitalizeFirstLetter() + " " +
 									"Til: " + Moment(parking.endTime).tz("Europe/Oslo").locale("nb").format(" dddd HH:mm").capitalizeFirstLetter();
 
