@@ -15,7 +15,7 @@ var pusher = new Pusher({
 	encrypted: true
 });
 
-var ENABLE_PUSH = false;
+var ENABLE_PUSH = true;
 
 var PUSH_APP_CODE = "2D52E-A279A";
 var PUSH_AUTH_CODE = "10kqID2h62E4Gn4Ax38TifJKxUmZtbtgbUlrQQRDWhVhNH27JqMymGtRXNv1xCbWAOKzlEJa7XZPiS6yB0Bc";
@@ -145,7 +145,7 @@ exports.requestParking = function(req, res) {
 									return this.charAt(0).toUpperCase() + this.slice(1);
 								}
 
-								var message = user.userName + " spør etter parkering: \n" +
+								var message = user.firstName + " " + user.lastName " spør etter parkering: \n" +
 									"Fra: " + Moment(parking.startTime).tz("Europe/Oslo").locale("nb").format(" dddd HH:mm").capitalizeFirstLetter() + " " +
 									"Til: " + Moment(parking.endTime).tz("Europe/Oslo").locale("nb").format(" dddd HH:mm").capitalizeFirstLetter();
 
